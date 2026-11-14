@@ -33,7 +33,6 @@ function CustomDayButton(props) {
   return (
     <button
       {...buttonProps}
-      data-testid={`day-${day.isoDate}`}
     />
   );
 }
@@ -43,7 +42,6 @@ function CustomNextMonthButton(props) {
   return (
     <button
       {...props}
-      data-testid={`${dataTestId}-next-month`}
     />
   );
 }
@@ -53,7 +51,6 @@ function CustomPreviousMonthButton(props) {
   return (
     <button
       {...props}
-      data-testid={`${dataTestId}-prev-month`}
     />
   );
 }
@@ -74,7 +71,6 @@ function CustomSelect(props) {
   return (
     <select
       {...props}
-      data-testid={selectTestId}
     />
   );
 }
@@ -84,7 +80,6 @@ function CustomOption(props) {
   return (
     <option
       {...props}
-      data-testid={`${dataTestId}-option-${props.value}`}
     />
   );
 }
@@ -171,7 +166,6 @@ export default function CustomDatePicker({
             type="text"
             readOnly
             id={id}
-            data-testid={dataTestId}
             value={value || ''}
             onClick={() => setIsOpen(!isOpen)}
             className={`${inputClassName} cursor-pointer`}
@@ -186,7 +180,6 @@ export default function CustomDatePicker({
           <span
             aria-hidden="true"
             onClick={() => setIsOpen(!isOpen)}
-            data-testid={`${dataTestId}-toggle`}
             className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant cursor-pointer hover:text-primary transition-colors"
           >
             calendar_today
@@ -198,7 +191,6 @@ export default function CustomDatePicker({
             type="text"
             readOnly
             id={id}
-            data-testid={dataTestId}
             value={value || ''}
             onClick={() => setIsOpen(!isOpen)}
             className={`${inputClassName} cursor-pointer`}
@@ -206,7 +198,6 @@ export default function CustomDatePicker({
           <span
             aria-hidden="true"
             onClick={() => setIsOpen(!isOpen)}
-            data-testid={`${dataTestId}-toggle`}
             className="material-symbols-outlined absolute right-3 top-3.5 text-secondary cursor-pointer hover:text-primary transition-colors"
           >
             calendar_today
@@ -216,7 +207,6 @@ export default function CustomDatePicker({
 
       {isOpen && (
         <div
-          data-testid={`${dataTestId}-popover`}
           className="absolute left-0 mt-2 z-50 bg-surface-container-lowest border border-outline-variant/30 rounded-xl shadow-xl p-4 min-w-[320px] dark:bg-slate-900 dark:border-slate-800"
         >
           <DatePickerTestIdContext.Provider value={dataTestId}>

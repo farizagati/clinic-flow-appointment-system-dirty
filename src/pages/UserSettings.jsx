@@ -211,12 +211,12 @@ export default function UserSettings() {
   const profilePicUrl = currentUser?.profilePic || defaultAvatar;
 
   return (
-    <div id="user-settings-page" data-testid="user-settings-page" className="flex-grow w-full max-w-container-max mx-auto px-md md:px-lg py-xl">
+    <div className="flex-grow w-full max-w-container-max mx-auto px-md md:px-lg py-xl">
       {/* Header Section */}
       {viewMode !== 'password' && (
         <div className="mb-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 data-testid="settings-title" className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-xs">
+            <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-xs">
               {viewMode === 'edit' ? 'Edit Profile' : 'User Settings'}
             </h1>
             <p className="font-body-md text-body-md text-secondary">
@@ -229,7 +229,6 @@ export default function UserSettings() {
             <div className="flex items-center gap-3">
               <button
                 type="button"
-                data-testid="edit-profile-cancel-btn"
                 onClick={cancelEditing}
                 className="px-6 py-2 rounded-lg font-label-md text-label-md text-on-background bg-surface-container border border-outline-variant hover:bg-surface-container-high transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-40"
               >
@@ -237,7 +236,6 @@ export default function UserSettings() {
               </button>
               <button
                 type="button"
-                data-testid="edit-profile-save-btn"
                 onClick={handleEditProfileSubmit}
                 className="px-6 py-2 rounded-lg font-label-md text-label-md text-on-primary bg-primary hover:bg-surface-tint transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-40 shadow-[0px_4px_12px_rgba(0,0,0,0.08)] hover:shadow-[0px_8px_24px_rgba(0,0,0,0.12)]"
               >
@@ -250,13 +248,13 @@ export default function UserSettings() {
 
       {/* Global Alerts */}
       {error && (
-        <div id="settings-error" data-testid="settings-error" role="alert" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
+        <div role="alert" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
           {error}
         </div>
       )}
 
       {success && (
-        <div id="settings-success" data-testid="settings-success" role="status" className="mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
+        <div role="status" className="mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
           {success}
         </div>
       )}
@@ -279,7 +277,6 @@ export default function UserSettings() {
                   <button
                     type="button"
                     onClick={handleImageClick}
-                    data-testid="profile-pic-upload-btn"
                     aria-label="Upload profile photo"
                     className="absolute inset-0 bg-black/45 rounded-full flex flex-col items-center justify-center text-white cursor-pointer transition-all hover:bg-black/60 z-20"
                   >
@@ -294,11 +291,10 @@ export default function UserSettings() {
                     onChange={handleFileChange}
                     accept="image/*"
                     className="hidden"
-                    data-testid="profile-pic-file-input"
                   />
                 )}
               </div>
-              <h2 data-testid="settings-profile-name" className="font-headline-sm text-headline-sm text-on-background mb-xs">
+              <h2 className="font-headline-sm text-headline-sm text-on-background mb-xs">
                 {viewMode === 'edit' ? editName : (currentUser?.name || 'Alexia Sterling')}
               </h2>
               <p className="font-body-sm text-body-sm text-secondary mb-xl">Patient ID: #CF-8829</p>
@@ -306,8 +302,6 @@ export default function UserSettings() {
               {viewMode === 'view' && (
                 <div className="w-full flex flex-col gap-sm">
                   <button
-                    id="btn-edit-profile"
-                    data-testid="edit-profile-btn"
                     onClick={startEditing}
                     className="w-full bg-primary text-on-primary font-label-md text-label-md py-3 rounded-lg hover:bg-surface-tint transition-colors shadow-[0px_4px_12px_rgba(0,0,0,0.08)] hover:shadow-[0px_8px_24px_rgba(0,0,0,0.12)] focus-ring-subtle flex items-center justify-center gap-2"
                   >
@@ -315,8 +309,6 @@ export default function UserSettings() {
                     Edit Profile
                   </button>
                   <button
-                    id="btn-change-password"
-                    data-testid="change-password-btn"
                     onClick={startChangePassword}
                     className="w-full bg-surface text-on-surface border border-outline-variant font-label-md text-label-md py-3 rounded-lg hover:bg-surface-variant transition-colors focus-ring-subtle flex items-center justify-center gap-2"
                   >
@@ -335,24 +327,24 @@ export default function UserSettings() {
               <div className="flex flex-col gap-lg">
                 <section className="bg-surface rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
                   <div className="px-lg py-md border-b border-outline-variant/30 bg-surface-container-low/50">
-                    <h3 data-testid="settings-personal-title" className="font-headline-sm text-headline-sm text-on-background">Personal Information</h3>
+                    <h3 className="font-headline-sm text-headline-sm text-on-background">Personal Information</h3>
                   </div>
                   <div className="p-lg grid grid-cols-1 sm:grid-cols-2 gap-lg">
                     <div className="flex flex-col gap-xs">
                       <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Full Name</span>
-                      <div data-testid="settings-display-name" className="font-body-md text-body-md text-on-surface pb-2 border-b border-outline-variant/50">
+                      <div className="font-body-md text-body-md text-on-surface pb-2 border-b border-outline-variant/50">
                         {currentUser?.name || 'Alexia Jane Sterling'}
                       </div>
                     </div>
                     <div className="flex flex-col gap-xs">
                       <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Gender</span>
-                      <div data-testid="settings-display-gender" className="font-body-md text-body-md text-on-surface pb-2 border-b border-outline-variant/50">
+                      <div className="font-body-md text-body-md text-on-surface pb-2 border-b border-outline-variant/50">
                         {currentUser?.gender || 'Female'}
                       </div>
                     </div>
                     <div className="flex flex-col gap-xs">
                       <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Date of Birth</span>
-                      <div data-testid="settings-display-dob" className="font-body-md text-body-md text-on-surface pb-2 border-b border-outline-variant/50">
+                      <div className="font-body-md text-body-md text-on-surface pb-2 border-b border-outline-variant/50">
                         {currentUser?.dob || '12 October 1985'}
                       </div>
                     </div>
@@ -361,19 +353,19 @@ export default function UserSettings() {
 
                 <section className="bg-surface rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
                   <div className="px-lg py-md border-b border-outline-variant/30 bg-surface-container-low/50">
-                    <h3 data-testid="settings-clinical-title" className="font-headline-sm text-headline-sm text-on-background">Clinical & Contact Details</h3>
+                    <h3 className="font-headline-sm text-headline-sm text-on-background">Clinical & Contact Details</h3>
                   </div>
                   <div className="p-lg grid grid-cols-1 sm:grid-cols-2 gap-lg">
                     <div className="flex flex-col gap-xs">
                       <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Blood Type</span>
-                      <div data-testid="settings-display-blood-type" className="font-body-md text-body-md text-on-surface pb-2 border-b border-outline-variant/50 flex items-center gap-2">
+                      <div className="font-body-md text-body-md text-on-surface pb-2 border-b border-outline-variant/50 flex items-center gap-2">
                         <span aria-hidden="true" className="material-symbols-outlined text-tertiary-container text-sm">bloodtype</span>
                         {currentUser?.bloodType || 'O Negative'}
                       </div>
                     </div>
                     <div className="flex flex-col gap-xs sm:col-span-2">
                       <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Primary Address</span>
-                      <div data-testid="settings-display-address" className="font-body-md text-body-md text-on-surface pb-2 border-b border-outline-variant/50 flex items-start gap-2 whitespace-pre-line">
+                      <div className="font-body-md text-body-md text-on-surface pb-2 border-b border-outline-variant/50 flex items-start gap-2 whitespace-pre-line">
                         <span aria-hidden="true" className="material-symbols-outlined text-secondary text-sm mt-1">location_on</span>
                         <span>{currentUser?.address || '482 Clinical Heights Parkway, Suite 300\nSan Francisco, CA 94107'}</span>
                       </div>
@@ -383,16 +375,16 @@ export default function UserSettings() {
 
                 <section className="bg-surface rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
                   <div className="px-lg py-md border-b border-outline-variant/30 bg-surface-container-low/50">
-                    <h3 data-testid="settings-emergency-title" className="font-headline-sm text-headline-sm text-on-background">Emergency Contact</h3>
+                    <h3 className="font-headline-sm text-headline-sm text-on-background">Emergency Contact</h3>
                   </div>
                   <div className="p-lg">
                     <div className="flex flex-col gap-xs">
                       <span className="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Primary Contact</span>
                       <div className="font-body-md text-body-md text-on-surface pb-2 border-b border-outline-variant/50">
-                        <span data-testid="settings-display-emergency-name" className="block font-medium">
+                        <span className="block font-medium">
                           {currentUser?.emergencyName || 'Robert Sterling (Spouse)'}
                         </span>
-                        <span data-testid="settings-display-emergency-phone" className="text-secondary text-sm">
+                        <span className="text-secondary text-sm">
                           {currentUser?.emergencyPhone || '+1 (555) 987-6543'}
                         </span>
                       </div>
@@ -400,8 +392,6 @@ export default function UserSettings() {
                   </div>
                   <div className="px-lg py-md bg-surface-container-low/30 border-t border-outline-variant/30 flex justify-end">
                     <button
-                      id="btn-download-records"
-                      data-testid="download-records-btn"
                       onClick={handleDownloadRecords}
                       disabled={downloading}
                       className="bg-surface text-primary border border-primary font-label-md text-label-md px-4 py-2 rounded-lg hover:bg-primary-container/10 transition-colors focus-ring-subtle flex items-center gap-2"
@@ -414,7 +404,7 @@ export default function UserSettings() {
                 {/* Danger Zone */}
                 <section aria-labelledby="danger-zone-heading" className="bg-surface rounded-xl shadow-sm border border-error/40 overflow-hidden mt-md w-full">
                   <div className="px-lg py-md border-b border-error/20 bg-error-container/20">
-                    <h3 id="danger-zone-heading" data-testid="settings-danger-zone-title" className="font-headline-sm text-headline-sm text-error flex items-center gap-2">
+                    <h3 id="danger-zone-heading" className="font-headline-sm text-headline-sm text-error flex items-center gap-2">
                       <span aria-hidden="true" className="material-symbols-outlined">warning</span>
                       Danger Zone
                     </h3>
@@ -425,8 +415,6 @@ export default function UserSettings() {
                       <p className="font-body-sm text-body-sm text-secondary mt-1">This will clear all custom data (users, appointments, clinics, doctors) and reset the app back to mock defaults.</p>
                     </div>
                     <button
-                      id="btn-purge-data"
-                      data-testid="purge-data-btn"
                       onClick={handlePurge}
                       className="shrink-0 bg-error text-on-error font-label-md text-label-md px-4 py-2 rounded-lg hover:bg-error/90 transition-colors shadow-sm focus:ring-2 focus:ring-error focus:ring-offset-2 focus:outline-none flex items-center gap-2"
                     >
@@ -439,13 +427,12 @@ export default function UserSettings() {
             ) : (
               // Edit Profile Form View
               <form
-                data-testid="edit-profile-form"
                 onSubmit={handleEditProfileSubmit}
                 className="flex flex-col gap-lg"
               >
                 {/* Personal Information Section */}
                 <div className="bg-surface rounded-xl p-lg shadow-sm border border-outline-variant/30">
-                  <h3 data-testid="edit-personal-title" className="font-headline-sm text-headline-sm text-on-background mb-md flex items-center gap-2 border-b border-outline-variant pb-3">
+                  <h3 className="font-headline-sm text-headline-sm text-on-background mb-md flex items-center gap-2 border-b border-outline-variant pb-3">
                     <span aria-hidden="true" className="material-symbols-outlined text-primary">person</span>
                     Personal Information
                   </h3>
@@ -456,7 +443,6 @@ export default function UserSettings() {
                       <input
                         className="w-full px-4 py-3 bg-transparent border border-primary rounded-lg font-body-md text-body-md text-on-background focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-40 transition-shadow"
                         id="fullName"
-                        data-testid="edit-profile-name-input"
                         type="text"
                         value={editName}
                         onChange={(e) => setEditName(e.target.value)}
@@ -487,7 +473,6 @@ export default function UserSettings() {
                       <select
                         className="w-full px-4 py-3 bg-surface border border-outline hover:border-outline-variant rounded-lg font-body-md text-body-md text-on-background focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-40 transition-shadow appearance-none"
                         id="gender"
-                        data-testid="edit-profile-gender-select"
                         value={editGender}
                         onChange={(e) => setEditGender(e.target.value)}
                       >
@@ -503,7 +488,7 @@ export default function UserSettings() {
 
                 {/* Clinical Details & Contact Section */}
                 <div className="bg-surface rounded-xl p-lg shadow-sm border border-outline-variant/30">
-                  <h3 data-testid="edit-clinical-title" className="font-headline-sm text-headline-sm text-on-background mb-md flex items-center gap-2 border-b border-outline-variant pb-3">
+                  <h3 className="font-headline-sm text-headline-sm text-on-background mb-md flex items-center gap-2 border-b border-outline-variant pb-3">
                     <span aria-hidden="true" className="material-symbols-outlined text-primary">medical_information</span>
                     Clinical & Contact Details
                   </h3>
@@ -514,7 +499,6 @@ export default function UserSettings() {
                       <select
                         className="w-full px-4 py-3 bg-surface border border-outline hover:border-outline-variant rounded-lg font-body-md text-body-md text-on-background focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-40 transition-shadow appearance-none"
                         id="bloodType"
-                        data-testid="edit-profile-blood-type-select"
                         value={editBloodType}
                         onChange={(e) => setEditBloodType(e.target.value)}
                       >
@@ -535,7 +519,6 @@ export default function UserSettings() {
                       <textarea
                         className="w-full px-4 py-3 bg-transparent border border-outline hover:border-outline-variant rounded-lg font-body-md text-body-md text-on-background focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-40 transition-shadow resize-none"
                         id="address"
-                        data-testid="edit-profile-address-textarea"
                         rows="2"
                         value={editAddress}
                         onChange={(e) => setEditAddress(e.target.value)}
@@ -546,7 +529,7 @@ export default function UserSettings() {
 
                 {/* Emergency Contact Section */}
                 <div className="bg-surface rounded-xl p-lg shadow-sm border border-outline-variant/30">
-                  <h3 data-testid="edit-emergency-title" className="font-headline-sm text-headline-sm text-on-background mb-md flex items-center gap-2 border-b border-outline-variant pb-3">
+                  <h3 className="font-headline-sm text-headline-sm text-on-background mb-md flex items-center gap-2 border-b border-outline-variant pb-3">
                     <span aria-hidden="true" className="material-symbols-outlined text-primary">contact_emergency</span>
                     Emergency Contact
                   </h3>
@@ -557,7 +540,6 @@ export default function UserSettings() {
                       <input
                         className="w-full px-4 py-3 bg-transparent border border-outline hover:border-outline-variant rounded-lg font-body-md text-body-md text-on-background focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-40 transition-shadow"
                         id="emergencyName"
-                        data-testid="edit-profile-emergency-name-input"
                         type="text"
                         value={editEmergencyName}
                         onChange={(e) => setEditEmergencyName(e.target.value)}
@@ -570,7 +552,6 @@ export default function UserSettings() {
                         <input
                           className="w-full pl-4 pr-10 py-3 bg-transparent border border-outline hover:border-outline-variant rounded-lg font-body-md text-body-md text-on-background focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-40 transition-shadow"
                           id="emergencyPhone"
-                          data-testid="edit-profile-emergency-phone-input"
                           type="tel"
                           value={editEmergencyPhone}
                           onChange={(e) => setEditEmergencyPhone(e.target.value)}
@@ -593,14 +574,13 @@ export default function UserSettings() {
           <div className="mb-lg">
             <button
               type="button"
-              data-testid="change-password-back-btn"
               onClick={cancelChangePassword}
               className="inline-flex items-center gap-xs text-secondary hover:text-primary transition-colors mb-sm font-label-md text-label-md"
             >
               <span aria-hidden="true" className="material-symbols-outlined text-sm">arrow_back</span>
               Back to Settings
             </button>
-            <h1 data-testid="change-password-title" className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-xs">
+            <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-xs">
               Change Password
             </h1>
             <p className="font-body-md text-body-md text-secondary">
@@ -611,7 +591,6 @@ export default function UserSettings() {
           {/* Change Password Form Card */}
           <div className="bg-surface rounded-lg shadow-sm p-lg border border-outline-variant/30">
             <form
-              data-testid="change-password-form"
               onSubmit={handleChangePasswordSubmit}
               className="space-y-lg"
             >
@@ -625,7 +604,6 @@ export default function UserSettings() {
                   <input
                     className="w-full pl-10 pr-3 py-3 bg-transparent border-none focus:ring-0 font-body-md text-body-md text-on-surface placeholder-secondary-fixed-dim"
                     id="currentPassword"
-                    data-testid="change-password-current-input"
                     type="password"
                     placeholder="Enter current password"
                     value={currentPassword}
@@ -647,7 +625,6 @@ export default function UserSettings() {
                   <input
                     className="w-full pl-10 pr-3 py-3 bg-transparent border-none focus:ring-0 font-body-md text-body-md text-on-surface placeholder-secondary-fixed-dim"
                     id="newPassword"
-                    data-testid="change-password-new-input"
                     type="password"
                     placeholder="Enter new password"
                     value={newPassword}
@@ -666,7 +643,6 @@ export default function UserSettings() {
                   <input
                     className="w-full pl-10 pr-3 py-3 bg-transparent border-none focus:ring-0 font-body-md text-body-md text-on-surface placeholder-secondary-fixed-dim"
                     id="confirmPassword"
-                    data-testid="change-password-confirm-input"
                     type="password"
                     placeholder="Re-enter new password"
                     value={confirmNewPassword}
@@ -679,7 +655,6 @@ export default function UserSettings() {
               <div className="flex flex-col-reverse sm:flex-row justify-end gap-md pt-sm">
                 <button
                   type="button"
-                  data-testid="change-password-cancel-btn"
                   onClick={cancelChangePassword}
                   className="px-6 py-2.5 font-label-md text-label-md text-on-surface bg-surface-container hover:bg-surface-container-high rounded transition-colors duration-200 text-center focus:ring-2 focus:ring-primary focus:ring-opacity-40 outline-none"
                 >
@@ -687,7 +662,6 @@ export default function UserSettings() {
                 </button>
                 <button
                   type="submit"
-                  data-testid="change-password-submit-btn"
                   className="px-6 py-2.5 font-label-md text-label-md text-on-primary bg-primary hover:bg-surface-tint rounded shadow-[0px_4px_12px_rgba(0,0,0,0.08)] transition-all duration-200 text-center focus:ring-2 focus:ring-primary focus:ring-opacity-40 outline-none"
                 >
                   Update Password

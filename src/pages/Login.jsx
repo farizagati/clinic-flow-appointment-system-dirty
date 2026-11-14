@@ -60,11 +60,11 @@ export default function Login() {
   };
 
   return (
-    <div id="login-page" data-testid="login-page" className="flex-grow flex flex-col w-full h-full">
+    <div className="flex-grow flex flex-col w-full h-full">
       <div className="flex-grow flex items-center justify-center p-md md:p-lg w-full">
         <div className="w-full max-w-lg mx-auto">
           <div className="text-center mb-xl">
-            <h1 id="login-title" data-testid="login-title" className="font-headline-lg text-headline-lg text-primary md:font-headline-lg md:text-headline-lg font-headline-lg-mobile text-headline-lg-mobile mb-sm">
+            <h1 className="font-headline-lg text-headline-lg text-primary md:font-headline-lg md:text-headline-lg font-headline-lg-mobile text-headline-lg-mobile mb-sm">
               ClinicFlow
             </h1>
             <p className="font-body-md text-body-md text-on-surface-variant">Secure access to your healthcare portal.</p>
@@ -72,19 +72,18 @@ export default function Login() {
           
           <div className="bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.08)] p-xl mb-lg border border-surface-variant">
             {error && (
-              <div id="login-error" data-testid="login-error" role="alert" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
+              <div role="alert" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
                 {error}
               </div>
             )}
             
-            <form id="login-form" data-testid="login-form" onSubmit={handleSubmit} noValidate className="space-y-lg">
+            <form onSubmit={handleSubmit} noValidate className="space-y-lg">
               {/* Email */}
               <div>
                 <div className="relative group input-focus-ring rounded-lg transition-shadow duration-200">
                   <input
                     type="email"
                     id="login-email"
-                    data-testid="login-email"
                     value={email}
                     onChange={handleEmailChange}
                     placeholder="johnyjohnyyespapa@mail.com"
@@ -107,7 +106,6 @@ export default function Login() {
                   <input
                     type="password"
                     id="login-password"
-                    data-testid="login-password"
                     value={password}
                     onChange={handlePasswordChange}
                     placeholder="••••••••"
@@ -126,18 +124,16 @@ export default function Login() {
 
               <button 
                 type="submit" 
-                id="login-submit" 
-                data-testid="login-submit"
                 className="w-full bg-primary text-on-primary font-label-md text-label-md py-md px-lg rounded-lg hover:bg-surface-tint focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface-container-lowest transition-colors shadow-sm active:scale-[0.98]"
               >
                 Log In
               </button>
             </form>
             
-            <div id="login-footer" data-testid="login-footer" className="mt-lg text-center">
+            <div className="mt-lg text-center">
               <p className="font-body-sm text-body-sm text-on-surface-variant">
                 Don't have an account?{' '}
-                <Link to="/register" id="login-register-link" data-testid="login-register-link" className="font-label-md text-label-md text-primary hover:text-primary-fixed-dim transition-colors">
+                <Link to="/register" className="font-label-md text-label-md text-primary hover:text-primary-fixed-dim transition-colors">
                   Register Here
                 </Link>
               </p>
@@ -148,10 +144,10 @@ export default function Login() {
           <div className="bg-surface-container-low rounded-lg p-md border border-surface-variant">
             <div className="flex items-center gap-sm mb-sm text-on-surface-variant">
               <span aria-hidden="true" className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 0" }}>info</span>
-              <h2 data-testid="login-credentials-title" className="font-label-md text-label-md">Test Credentials</h2>
+              <h2 className="font-label-md text-label-md">Test Credentials</h2>
             </div>
             <div className="overflow-x-auto rounded border border-outline-variant">
-              <table data-testid="login-credentials-table" className="w-full text-left border-collapse font-body-sm text-body-sm">
+              <table className="w-full text-left border-collapse font-body-sm text-body-sm">
                 <thead className="bg-surface-container-high text-on-surface-variant">
                   <tr>
                     <th className="px-md py-sm font-semibold border-b border-outline-variant whitespace-nowrap">Role</th>

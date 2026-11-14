@@ -164,18 +164,16 @@ export default function MyAppointments() {
   };
 
   return (
-    <div id="my-appointments-page" data-testid="my-appointments-page" className="flex-grow w-full max-w-container-max mx-auto px-md md:px-lg py-gutter h-full">
+    <div className="flex-grow w-full max-w-container-max mx-auto px-md md:px-lg py-gutter h-full">
       <div className="mb-gutter flex flex-col md:flex-row justify-between items-start md:items-center gap-md">
         <div>
-          <h1 id="my-appointments-title" data-testid="my-appointments-title" className="font-headline-lg text-headline-lg text-on-background mb-xs">
+          <h1 className="font-headline-lg text-headline-lg text-on-background mb-xs">
             My Appointments
           </h1>
           <p className="font-body-md text-body-md text-secondary">Manage your upcoming and past medical appointments.</p>
         </div>
         
         <button
-          id="book-new-appointment-btn"
-          data-testid="book-new-appointment-btn"
           onClick={() => navigate('/book-appointment')}
           className="bg-primary text-on-primary font-label-md text-label-md px-6 py-3 rounded-lg hover:bg-primary-container transition-colors shadow-sm flex items-center gap-2 active:scale-95"
         >
@@ -184,7 +182,7 @@ export default function MyAppointments() {
         </button>
       </div>
 
-      <div className="bg-surface rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.08)] border border-outline-variant" data-testid="appointments-table-container">
+      <div className="bg-surface rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.08)] border border-outline-variant">
         
         {/* Table Controls */}
         <div className="p-md border-b border-outline-variant flex flex-col sm:flex-row justify-between items-center gap-md bg-surface-bright rounded-t-xl">
@@ -192,7 +190,6 @@ export default function MyAppointments() {
             <span aria-hidden="true" className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary">search</span>
             <input
               type="text"
-              data-testid="search-input"
               aria-label="Search appointments"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -203,7 +200,6 @@ export default function MyAppointments() {
           <div className="flex gap-sm">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
-              data-testid="btn-filter"
               className={`px-3 py-2 border rounded-lg flex items-center gap-2 font-label-md text-label-md transition-colors active:scale-95 ${
                 isFilterOpen
                   ? 'bg-primary/10 border-primary text-primary hover:bg-primary/20'
@@ -218,8 +214,6 @@ export default function MyAppointments() {
         {/* Collapsible Filter Panel */}
         {isFilterOpen && (
           <div
-            id="filter-panel"
-            data-testid="filter-panel"
             className="p-lg border-b border-outline-variant bg-surface-container-lowest grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-lg"
           >
             {/* Date Range Column */}
@@ -237,7 +231,6 @@ export default function MyAppointments() {
               <label className="font-label-md text-on-surface-variant font-medium" htmlFor="filter-department">Department</label>
               <select
                 id="filter-department"
-                data-testid="filter-department"
                 value={tempFilters.department}
                 onChange={(e) => setTempFilters((prev) => ({ ...prev, department: e.target.value }))}
                 className="w-full p-2 border border-outline rounded-lg font-body-sm focus:ring-2 focus:ring-primary/40 focus:border-primary outline-none bg-surface text-on-surface"
@@ -254,7 +247,6 @@ export default function MyAppointments() {
               <label className="font-label-md text-on-surface-variant font-medium" htmlFor="filter-doctor">Doctor</label>
               <input
                 id="filter-doctor"
-                data-testid="filter-doctor"
                 type="text"
                 placeholder="Search doctor..."
                 value={tempFilters.doctor}
@@ -266,12 +258,11 @@ export default function MyAppointments() {
             {/* Status Column */}
             <div className="flex flex-col gap-xs">
               <span id="filter-status-label" className="font-label-md text-on-surface-variant font-medium">Status</span>
-              <div role="group" aria-labelledby="filter-status-label" data-testid="filter-status" className="flex flex-wrap gap-2 mt-1">
+              <div role="group" aria-labelledby="filter-status-label" className="flex flex-wrap gap-2 mt-1">
                 {['Confirmed', 'Scheduled', 'Pending', 'Cancelled'].map((statusName) => (
                   <label key={statusName} className="flex items-center gap-1 cursor-pointer">
                     <input
                       type="checkbox"
-                      data-testid={`status-checkbox-${statusName.toLowerCase()}`}
                       checked={tempFilters.status[statusName] || false}
                       onChange={(e) => {
                         const checked = e.target.checked;
@@ -295,14 +286,12 @@ export default function MyAppointments() {
             <div className="lg:col-span-4 flex justify-end gap-md mt-2">
               <button
                 onClick={handleResetFilters}
-                data-testid="btn-reset-filters"
                 className="px-4 py-2 font-label-md text-secondary hover:bg-surface-variant rounded-lg transition-colors active:scale-95"
               >
                 Reset
               </button>
               <button
                 onClick={handleApplyFilters}
-                data-testid="btn-apply-filters"
                 className="px-6 py-2 font-label-md bg-primary text-on-primary rounded-lg hover:bg-primary-container transition-colors shadow-sm active:scale-95"
               >
                 Apply Filters
@@ -313,7 +302,7 @@ export default function MyAppointments() {
 
         {/* Table Responsive Wrapper */}
         <div className="overflow-x-auto min-h-[150px] rounded-b-xl">
-          <table id="appointments-table" data-testid="appointments-table" className="w-full text-left border-collapse">
+          <table className="w-full text-left border-collapse">
             <thead className="bg-surface-container-low font-label-md text-label-md text-on-surface-variant border-b border-outline-variant">
               <tr>
                 <th className="px-md py-sm font-semibold whitespace-nowrap">Date & Time</th>
@@ -324,11 +313,11 @@ export default function MyAppointments() {
                 <th className="px-md py-sm font-semibold whitespace-nowrap text-right">Actions</th>
               </tr>
             </thead>
-            <tbody id="appointments-list" data-testid="appointments-list" className="font-body-sm text-body-sm divide-y divide-outline-variant text-on-surface relative">
+            <tbody className="font-body-sm text-body-sm divide-y divide-outline-variant text-on-surface relative">
               {isLoading ? (
                 <tr>
                   <td colSpan="6" className="py-12 text-center">
-                    <div className="flex flex-col items-center justify-center gap-3" data-testid="search-loading-spinner">
+                    <div className="flex flex-col items-center justify-center gap-3">
                       <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
                       <span className="text-secondary font-body-sm">Loading appointments...</span>
                     </div>
@@ -336,7 +325,7 @@ export default function MyAppointments() {
                 </tr>
               ) : filteredAppointments.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="p-xl text-center font-body-md text-secondary" data-testid="no-appointments-message">
+                  <td colSpan="6" className="p-xl text-center font-body-md text-secondary">
                     {myAppointments.length === 0 ? 'You have no booked appointments.' : 'No matching appointments found.'}
                   </td>
                 </tr>
@@ -344,8 +333,6 @@ export default function MyAppointments() {
                 paginatedAppointments.map((apt) => (
                   <tr
                     key={apt.id}
-                    id={`appointment-row-${apt.id}`}
-                    data-testid={`appointment-item-${apt.id}`}
                     className="hover:bg-surface-variant/50 transition-colors animate-fadeIn"
                   >
                     <td className="px-md py-sm font-medium">
@@ -356,8 +343,6 @@ export default function MyAppointments() {
                     <td className="px-md py-sm">{apt.department}</td>
                     <td className="px-md py-sm">
                       <span 
-                        id={`appointment-status-${apt.id}`} 
-                        data-testid={`appointment-status-${apt.id}`}
                         className={`px-2 py-1 rounded-full font-label-sm inline-flex items-center gap-1 ${getStatusClass(apt.status)}`}
                       >
                         <span aria-hidden="true" className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>
@@ -369,8 +354,6 @@ export default function MyAppointments() {
                     <td className="px-md py-sm text-right whitespace-nowrap">
                       {apt.status !== 'Cancelled' ? (
                         <button
-                          id={`cancel-appointment-${apt.id}`}
-                          data-testid={`cancel-appointment-${apt.id}`}
                           onClick={() => cancelAppointment(apt.id)}
                           className="text-error hover:bg-error-container p-1 px-3 rounded-md transition-colors flex items-center gap-1 ml-auto font-label-sm text-label-sm"
                         >
@@ -378,7 +361,7 @@ export default function MyAppointments() {
                           Cancel
                         </button>
                       ) : (
-                        <span id={`cancelled-label-${apt.id}`} data-testid={`cancelled-label-${apt.id}`} className="text-secondary font-label-sm text-label-sm px-3 p-1">
+                        <span className="text-secondary font-label-sm text-label-sm px-3 p-1">
                           Cancelled
                         </span>
                       )}
@@ -394,7 +377,6 @@ export default function MyAppointments() {
         {filteredAppointments.length > 0 && (
         <div
           className="p-md border-t border-outline-variant bg-surface-bright flex flex-col sm:flex-row justify-between items-center gap-md font-body-sm text-body-sm text-secondary rounded-b-xl"
-          data-testid="pagination-container"
         >
           <div>
             Showing{' '}
@@ -412,7 +394,6 @@ export default function MyAppointments() {
           <div className="flex items-center gap-xs">
             <button
               aria-label="Previous Page"
-              data-testid="btn-page-prev"
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={safePage === 1}
               className="p-1 rounded hover:bg-surface-variant disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
@@ -426,7 +407,6 @@ export default function MyAppointments() {
               ) : (
                 <button
                   key={page}
-                  data-testid={`btn-page-${page}`}
                   onClick={() => setCurrentPage(page)}
                   className={`w-8 h-8 rounded-lg font-medium flex items-center justify-center transition-colors ${
                     safePage === page
@@ -441,7 +421,6 @@ export default function MyAppointments() {
 
             <button
               aria-label="Next Page"
-              data-testid="btn-page-next"
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={safePage === totalPages}
               className="p-1 rounded hover:bg-surface-variant disabled:opacity-50 disabled:cursor-not-allowed transition-colors"

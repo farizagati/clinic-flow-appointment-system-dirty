@@ -14,7 +14,6 @@ function CustomDayButton(props) {
   return (
     <button
       {...buttonProps}
-      data-testid={`day-${day.isoDate}`}
     />
   );
 }
@@ -24,7 +23,6 @@ function CustomNextMonthButton(props) {
   return (
     <button
       {...props}
-      data-testid={`${dataTestId}-next-month`}
     />
   );
 }
@@ -34,7 +32,6 @@ function CustomPreviousMonthButton(props) {
   return (
     <button
       {...props}
-      data-testid={`${dataTestId}-prev-month`}
     />
   );
 }
@@ -55,7 +52,6 @@ function CustomSelect(props) {
   return (
     <select
       {...props}
-      data-testid={selectTestId}
     />
   );
 }
@@ -65,7 +61,6 @@ function CustomOption(props) {
   return (
     <option
       {...props}
-      data-testid={`${dataTestId}-option-${props.value}`}
     />
   );
 }
@@ -193,12 +188,11 @@ export default function CustomDateRangePicker({
   const hasAnyDraft = draftRange?.from || draftRange?.to;
 
   return (
-    <div ref={containerRef} className={`relative ${containerClassName}`} data-testid={dataTestId}>
+    <div ref={containerRef} className={`relative ${containerClassName}`}>
       <div className="flex items-center justify-between border border-outline rounded-lg px-3 py-2 bg-surface hover:border-primary focus-within:ring-2 focus-within:ring-primary/40 focus-within:border-primary transition-colors cursor-pointer w-full text-on-surface">
         <button
           type="button"
           onClick={handleToggle}
-          data-testid={`${dataTestId}-toggle`}
           aria-label={`${ariaLabel}: ${fromText} to ${toText}`}
           aria-haspopup="dialog"
           aria-expanded={isOpen}
@@ -208,14 +202,12 @@ export default function CustomDateRangePicker({
           <div className="flex items-center gap-1 font-body-sm min-w-0 flex-1">
             <span
               className={`truncate ${value?.from ? 'text-on-surface font-medium' : 'text-secondary'}`}
-              data-testid={`${dataTestId}-from-display`}
             >
               {fromText}
             </span>
             <span className="text-secondary flex-shrink-0 mx-0.5">—</span>
             <span
               className={`truncate ${value?.to ? 'text-on-surface font-medium' : 'text-secondary'}`}
-              data-testid={`${dataTestId}-to-display`}
             >
               {toText}
             </span>
@@ -224,7 +216,6 @@ export default function CustomDateRangePicker({
         {(value?.from || value?.to) && (
           <button
             type="button"
-            data-testid={`${dataTestId}-clear-btn`}
             onClick={(e) => {
               e.stopPropagation();
               onChange({ from: undefined, to: undefined });
@@ -239,12 +230,10 @@ export default function CustomDateRangePicker({
 
       {isOpen && (
         <div
-          data-testid={`${dataTestId}-popover`}
           className="absolute left-0 mt-2 z-50 bg-surface-container-lowest border border-outline-variant/30 rounded-xl shadow-xl min-w-[320px] dark:bg-slate-900 dark:border-slate-800 overflow-hidden"
         >
           {/* Hint / status bar */}
           <div
-            data-testid={`${dataTestId}-hint`}
             className={`px-4 py-2.5 border-b border-outline-variant/30 flex items-center gap-2 text-sm font-medium transition-colors ${
               isRangeComplete
                 ? 'bg-primary/10 text-primary'
@@ -280,7 +269,6 @@ export default function CustomDateRangePicker({
           <div className="px-4 pb-4 flex items-center justify-between gap-2 border-t border-outline-variant/30 pt-3">
             <button
               type="button"
-              data-testid={`${dataTestId}-btn-clear`}
               onClick={handleClear}
               disabled={!hasAnyDraft}
               className="px-3 py-1.5 text-sm font-medium text-secondary hover:text-error hover:bg-error/10 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
@@ -290,7 +278,6 @@ export default function CustomDateRangePicker({
             <div className="flex gap-2">
               <button
                 type="button"
-                data-testid={`${dataTestId}-btn-cancel`}
                 onClick={handleDiscard}
                 className="px-3 py-1.5 text-sm font-medium text-on-surface-variant hover:bg-surface-variant rounded-lg transition-colors"
               >
@@ -298,7 +285,6 @@ export default function CustomDateRangePicker({
               </button>
               <button
                 type="button"
-                data-testid={`${dataTestId}-btn-apply`}
                 onClick={handleApply}
                 disabled={!isRangeComplete}
                 className="px-4 py-1.5 text-sm font-medium bg-primary text-on-primary rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"

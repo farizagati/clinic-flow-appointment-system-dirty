@@ -86,36 +86,35 @@ export default function Register() {
   };
 
   return (
-    <div id="register-page" data-testid="register-page" className="flex-grow flex flex-col w-full h-full">
+    <div className="flex-grow flex flex-col w-full h-full">
       <div className="flex-grow flex items-center justify-center p-md md:p-lg w-full">
         <div className="w-full max-w-[480px] bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.08)] p-xl overflow-hidden relative z-10 border border-surface-variant mx-auto">
           <div className="text-center mb-xl">
-            <h1 id="register-title" data-testid="register-title" className="font-headline-lg text-headline-lg mb-sm text-on-surface">
+            <h1 className="font-headline-lg text-headline-lg mb-sm text-on-surface">
               ClinicFlow
             </h1>
             <p className="font-body-md text-body-md text-on-surface-variant">Create your account to streamline healthcare management.</p>
           </div>
 
           {error && (
-            <div id="register-error" data-testid="register-error" role="alert" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
+            <div role="alert" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
               {error}
             </div>
           )}
 
           {success && (
-            <div id="register-success" data-testid="register-success" role="status" className="mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
+            <div role="status" className="mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
               {success}
             </div>
           )}
 
-          <form id="register-form" data-testid="register-form" onSubmit={handleSubmit} noValidate className="flex flex-col gap-lg">
+          <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-lg">
             {/* Full Name */}
             <div>
               <div className="relative group input-focus-ring rounded-lg transition-shadow duration-200">
                 <input
                   type="text"
                   id="register-name"
-                  data-testid="register-name"
                   value={name}
                   onChange={(e) => { setName(e.target.value); clearFieldError('name'); }}
                   placeholder="John Doe"
@@ -138,7 +137,6 @@ export default function Register() {
                 <input
                   type="email"
                   id="register-email"
-                  data-testid="register-email"
                   value={email}
                   onChange={(e) => { setEmail(e.target.value); clearFieldError('email'); }}
                   placeholder="john@example.com"
@@ -161,7 +159,6 @@ export default function Register() {
                 <input
                   type="password"
                   id="register-password"
-                  data-testid="register-password"
                   value={password}
                   onChange={(e) => { setPassword(e.target.value); clearFieldError('password'); }}
                   placeholder="••••••••"
@@ -184,7 +181,6 @@ export default function Register() {
                 <input
                   type="password"
                   id="register-confirm-password"
-                  data-testid="register-confirm-password"
                   value={confirmPassword}
                   onChange={(e) => { setConfirmPassword(e.target.value); clearFieldError('confirmPassword'); }}
                   placeholder="••••••••"
@@ -206,7 +202,6 @@ export default function Register() {
               <label htmlFor="register-role" className="font-label-md text-label-md text-on-surface-variant">Account Role</label>
               <select
                 id="register-role"
-                data-testid="register-role"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
                 className="w-full rounded-lg border border-outline-variant bg-transparent px-md py-sm text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
@@ -218,17 +213,15 @@ export default function Register() {
 
             <button 
               type="submit" 
-              id="register-submit" 
-              data-testid="register-submit"
               className="w-full h-12 bg-primary text-on-primary font-label-md text-label-md rounded-lg shadow-[0px_4px_12px_rgba(0,0,0,0.08)] hover:shadow-[0px_8px_24px_rgba(0,0,0,0.12)] hover:bg-surface-tint transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2 flex items-center justify-center active:scale-[0.98]"
             >
               Create Account
             </button>
 
-            <div id="register-footer" data-testid="register-footer" className="text-center mt-sm">
+            <div className="text-center mt-sm">
               <p className="font-body-sm text-body-sm text-on-surface-variant">
                 Already have an account?{' '}
-                <Link to="/login" id="register-login-link" data-testid="register-login-link" className="text-primary font-label-md text-label-md hover:underline hover:text-primary-fixed-dim transition-colors">
+                <Link to="/login" className="text-primary font-label-md text-label-md hover:underline hover:text-primary-fixed-dim transition-colors">
                   Log In
                 </Link>
               </p>

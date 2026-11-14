@@ -122,7 +122,7 @@ export default function BookAppointment() {
   };
 
   return (
-    <div id="book-appointment-page" data-testid="book-appointment-page" className="flex-grow flex flex-col w-full h-full">
+    <div className="flex-grow flex flex-col w-full h-full">
       <div className="flex-grow flex items-center justify-center p-md md:p-gutter w-full max-w-container-max mx-auto">
         <div className="w-full max-w-3xl bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.08)] relative z-[10]">
           {/* Decorative Header Accent */}
@@ -130,25 +130,25 @@ export default function BookAppointment() {
           
           <div className="p-lg md:p-xl">
             <div className="mb-gutter text-center">
-              <h1 id="booking-title" data-testid="booking-title" className="font-headline-md text-headline-md text-on-surface mb-sm">
+              <h1 className="font-headline-md text-headline-md text-on-surface mb-sm">
                 Schedule Your Visit
               </h1>
               <p className="font-body-md text-body-md text-on-surface-variant">Please provide your details to secure an appointment slot.</p>
             </div>
 
             {error && (
-              <div id="appointment-error" data-testid="appointment-error" role="alert" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
+              <div role="alert" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
                 {error}
               </div>
             )}
 
             {success && (
-              <div id="appointment-success" data-testid="appointment-success" role="status" className="mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
+              <div role="status" className="mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
                 {success}
               </div>
             )}
 
-            <form id="appointment-form" data-testid="appointment-form" onSubmit={handleSubmit} noValidate className="space-y-gutter">
+            <form onSubmit={handleSubmit} noValidate className="space-y-gutter">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
                 
                 {/* Clinic Selection */}
@@ -156,7 +156,6 @@ export default function BookAppointment() {
                   <div className="floating-input relative">
                     <select
                       id="appointment-clinic"
-                      data-testid="appointment-clinic"
                       value={clinic}
                       onChange={(e) => { setClinic(e.target.value); clearFieldError('clinic'); }}
                       className={`w-full h-14 px-4 bg-transparent border rounded-lg text-on-surface focus:outline-none transition-colors appearance-none cursor-pointer ${
@@ -185,7 +184,6 @@ export default function BookAppointment() {
                   <div className="floating-input relative">
                     <select
                       id="appointment-department"
-                      data-testid="appointment-department"
                       value={department}
                       onChange={(e) => { setDepartment(e.target.value); clearFieldError('department'); }}
                       className={`w-full h-14 px-4 bg-transparent border rounded-lg text-on-surface focus:outline-none transition-colors appearance-none cursor-pointer ${
@@ -232,7 +230,7 @@ export default function BookAppointment() {
                     noOptionsText="No doctors available for this clinic and department."
                   />
                   {clinic && department && filteredDoctors.length === 0 && (
-                    <p data-testid="appointment-doctor-unavailable" className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+                    <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
                       No doctors available for this clinic and department.
                     </p>
                   )}
@@ -267,7 +265,6 @@ export default function BookAppointment() {
                   <div className="floating-input relative">
                     <select
                       id="appointment-time"
-                      data-testid="appointment-time"
                       value={time}
                       onChange={(e) => { setTime(e.target.value); clearFieldError('time'); }}
                       className={`w-full h-14 px-4 bg-transparent border rounded-lg text-on-surface focus:outline-none transition-colors appearance-none cursor-pointer ${
@@ -295,7 +292,6 @@ export default function BookAppointment() {
                 <div className="floating-input relative col-span-1 md:col-span-2">
                   <textarea
                     id="appointment-notes"
-                    data-testid="appointment-notes"
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     className="w-full p-4 bg-transparent border border-outline rounded-lg text-on-surface focus:outline-none transition-colors peer resize-none h-24"
@@ -312,7 +308,6 @@ export default function BookAppointment() {
               <div className="pt-lg flex flex-col sm:flex-row justify-end gap-md">
                 <button
                   type="button"
-                  data-testid="appointment-cancel"
                   onClick={() => navigate('/my-appointments')}
                   className="font-label-md text-label-md px-6 py-3 rounded-lg text-on-surface hover:bg-surface-container transition-colors order-2 sm:order-1 active:scale-[0.98]"
                 >
@@ -320,8 +315,6 @@ export default function BookAppointment() {
                 </button>
                 <button
                   type="submit"
-                  id="appointment-review-submit"
-                  data-testid="appointment-review-submit"
                   className="font-label-md text-label-md px-6 py-3 rounded-lg bg-primary text-on-primary hover:bg-surface-tint transition-colors shadow-[0px_4px_12px_rgba(0,0,0,0.08)] hover:shadow-[0px_8px_24px_rgba(0,0,0,0.12)] order-1 sm:order-2 flex items-center justify-center gap-sm active:scale-[0.98]"
                 >
                   Review Appointment

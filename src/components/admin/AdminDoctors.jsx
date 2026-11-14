@@ -48,13 +48,12 @@ function DoctorForm({ doctor, onClose, onSaved }) {
 
   return (
     <Modal title={isEdit ? 'Edit Doctor' : 'Add New Doctor'} testId={`${prefix}-modal`} onClose={onClose}>
-      <form onSubmit={handleSubmit} noValidate className="p-lg flex flex-col gap-md" data-testid={`${prefix}-form`}>
+      <form onSubmit={handleSubmit} noValidate className="p-lg flex flex-col gap-md">
         <div>
           <div className="floating-input relative">
             <input
               type="text"
               id={nameId}
-              data-testid={nameId}
               autoFocus
               value={name}
               onChange={(e) => {
@@ -77,7 +76,6 @@ function DoctorForm({ doctor, onClose, onSaved }) {
           <div className="floating-input relative">
             <select
               id={deptId}
-              data-testid={deptId}
               value={department}
               onChange={(e) => {
                 setDepartment(e.target.value);
@@ -101,7 +99,6 @@ function DoctorForm({ doctor, onClose, onSaved }) {
           <div className="floating-input relative">
             <select
               id={clinicId}
-              data-testid={clinicId}
               value={clinic}
               onChange={(e) => {
                 setClinic(e.target.value);
@@ -122,8 +119,8 @@ function DoctorForm({ doctor, onClose, onSaved }) {
         </div>
 
         <div className="flex justify-end gap-sm mt-sm">
-          <button type="button" onClick={onClose} className="px-4 py-2 font-label-md text-label-md text-on-surface hover:bg-surface-container rounded-lg transition-colors" data-testid={`${prefix}-cancel`}>Cancel</button>
-          <button type="submit" className="px-4 py-2 font-label-md text-label-md bg-primary text-on-primary hover:bg-surface-tint rounded-lg transition-colors" data-testid={`${prefix}-submit`}>
+          <button type="button" onClick={onClose} className="px-4 py-2 font-label-md text-label-md text-on-surface hover:bg-surface-container rounded-lg transition-colors">Cancel</button>
+          <button type="submit" className="px-4 py-2 font-label-md text-label-md bg-primary text-on-primary hover:bg-surface-tint rounded-lg transition-colors">
             {isEdit ? 'Save Changes' : 'Save Doctor'}
           </button>
         </div>
@@ -153,16 +150,15 @@ export default function AdminDoctors({ onNotify }) {
   };
 
   return (
-    <section id="doctors-section" data-testid="admin-doctors-section" className="bg-surface-lowest rounded-xl shadow-sm border border-outline-variant p-lg flex flex-col overflow-hidden">
+    <section className="bg-surface-lowest rounded-xl shadow-sm border border-outline-variant p-lg flex flex-col overflow-hidden">
       <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-md border-b border-surface-variant pb-sm gap-md">
-        <h2 data-testid="admin-doctors-title" className="font-headline-md text-headline-md text-on-surface flex items-center gap-xs">
+        <h2 className="font-headline-md text-headline-md text-on-surface flex items-center gap-xs">
           <span className="material-symbols-outlined text-primary" aria-hidden="true">medical_services</span>
           Doctors
         </h2>
         <div className="flex flex-col sm:flex-row gap-sm sm:items-center">
           <input
             type="search"
-            data-testid="admin-doctors-search"
             aria-label="Search doctors by name"
             placeholder="Search doctors..."
             value={search}
@@ -170,8 +166,6 @@ export default function AdminDoctors({ onNotify }) {
             className="w-full sm:w-56 px-4 py-2 border border-outline rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/40 bg-surface font-body-sm text-body-sm text-on-surface"
           />
           <button
-            id="admin-add-doc-btn"
-            data-testid="admin-add-doc-btn"
             onClick={() => {
               onNotify(null);
               setForm({});
@@ -185,7 +179,7 @@ export default function AdminDoctors({ onNotify }) {
       </div>
 
       <div className="overflow-x-auto flex-grow mb-md">
-        <table id="admin-doctors-table" data-testid="admin-doctors-table" className="w-full text-left border-collapse">
+        <table className="w-full text-left border-collapse">
           <thead>
             <tr className="text-on-surface-variant font-label-sm text-label-sm border-b border-outline-variant uppercase tracking-wider bg-surface-container-low">
               <th className="py-sm px-md font-semibold whitespace-nowrap">Doctor Name</th>
@@ -194,10 +188,10 @@ export default function AdminDoctors({ onNotify }) {
               <th className="py-sm px-md font-semibold text-right whitespace-nowrap">Actions</th>
             </tr>
           </thead>
-          <tbody id="admin-doctors-list" data-testid="admin-doctors-list" className="font-body-sm text-body-sm text-on-surface">
+          <tbody className="font-body-sm text-body-sm text-on-surface">
             {visibleDoctors.length === 0 && (
               <tr>
-                <td colSpan="4" data-testid="admin-no-matching-doctors" className="p-xl text-center font-body-md text-secondary">
+                <td colSpan="4" className="p-xl text-center font-body-md text-secondary">
                   No matching doctors found.
                 </td>
               </tr>
@@ -208,20 +202,17 @@ export default function AdminDoctors({ onNotify }) {
               return (
                 <tr
                   key={doc.id}
-                  id={`admin-doc-row-${doc.id}`}
-                  data-testid={`doc-item-${doc.id}`}
                   className="border-b border-surface-variant hover:bg-surface-container-low transition-colors"
                 >
-                  <td className="py-md px-md font-medium" data-testid={`doc-name-${doc.id}`}>{doc.name}</td>
-                  <td className="py-md px-md" data-testid={`doc-dept-${doc.id}`}>{dept ? dept.name : doc.departmentId}</td>
-                  <td className="py-md px-md" data-testid={`doc-clinic-${doc.id}`}>{clinic ? clinic.name : doc.clinicId}</td>
+                  <td className="py-md px-md font-medium">{doc.name}</td>
+                  <td className="py-md px-md">{dept ? dept.name : doc.departmentId}</td>
+                  <td className="py-md px-md">{clinic ? clinic.name : doc.clinicId}</td>
                   <td className="py-md px-md text-right whitespace-nowrap">
                     {isSeedDoctor(doc.id) ? (
-                      <span data-testid={`doc-builtin-${doc.id}`} className="text-secondary font-label-sm text-label-sm">Built-in</span>
+                      <span className="text-secondary font-label-sm text-label-sm">Built-in</span>
                     ) : (
                       <div className="flex gap-2 justify-end">
                         <button
-                          data-testid={`admin-edit-doc-${doc.id}`}
                           onClick={() => {
                             onNotify(null);
                             setForm({ doctor: doc });
@@ -231,7 +222,6 @@ export default function AdminDoctors({ onNotify }) {
                           Edit
                         </button>
                         <button
-                          data-testid={`admin-delete-doc-${doc.id}`}
                           onClick={() => {
                             onNotify(null);
                             setPendingDelete(doc);

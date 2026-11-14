@@ -18,10 +18,9 @@ export default function Pagination({ page, pageSize, total, onPageChange, testId
 
   return (
     <div
-      data-testid={`${testIdPrefix}-pagination`}
       className="pt-md border-t border-outline-variant flex flex-col sm:flex-row justify-between items-center gap-md font-body-sm text-body-sm text-secondary"
     >
-      <div data-testid={`${testIdPrefix}-pagination-summary`}>
+      <div>
         Showing <span className="font-medium text-on-surface">{start + 1}</span> to{' '}
         <span className="font-medium text-on-surface">{Math.min(start + pageSize, total)}</span> of{' '}
         <span className="font-medium text-on-surface">{total}</span> results
@@ -30,7 +29,6 @@ export default function Pagination({ page, pageSize, total, onPageChange, testId
         <button
           type="button"
           aria-label="Previous Page"
-          data-testid={`${testIdPrefix}-page-prev`}
           onClick={() => onPageChange(page - 1)}
           disabled={page === 1}
           className="p-1 rounded hover:bg-surface-variant disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
@@ -44,7 +42,6 @@ export default function Pagination({ page, pageSize, total, onPageChange, testId
             <button
               type="button"
               key={p}
-              data-testid={`${testIdPrefix}-page-${p}`}
               aria-current={p === page ? 'page' : undefined}
               onClick={() => onPageChange(p)}
               className={`w-8 h-8 rounded-lg font-medium flex items-center justify-center transition-colors ${
@@ -58,7 +55,6 @@ export default function Pagination({ page, pageSize, total, onPageChange, testId
         <button
           type="button"
           aria-label="Next Page"
-          data-testid={`${testIdPrefix}-page-next`}
           onClick={() => onPageChange(page + 1)}
           disabled={page === totalPages}
           className="p-1 rounded hover:bg-surface-variant disabled:opacity-50 disabled:cursor-not-allowed transition-colors"

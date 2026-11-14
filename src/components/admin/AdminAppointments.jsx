@@ -27,9 +27,9 @@ export default function AdminAppointments() {
   const pageItems = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   return (
-    <section id="appointments-section" data-testid="admin-appointments-section" className="bg-surface-lowest rounded-xl shadow-sm border border-outline-variant p-lg flex flex-col overflow-hidden">
+    <section className="bg-surface-lowest rounded-xl shadow-sm border border-outline-variant p-lg flex flex-col overflow-hidden">
       <div className="flex flex-col md:flex-row justify-between md:items-center mb-md border-b border-surface-variant pb-sm gap-md">
-        <h2 data-testid="admin-appointments-title" className="font-headline-md text-headline-md text-on-surface flex items-center gap-xs">
+        <h2 className="font-headline-md text-headline-md text-on-surface flex items-center gap-xs">
           <span className="material-symbols-outlined text-primary" aria-hidden="true">calendar_today</span>
           Appointment Management
         </h2>
@@ -37,7 +37,6 @@ export default function AdminAppointments() {
           <div className="flex flex-col sm:flex-row gap-sm">
             <input
               type="search"
-              data-testid="admin-appointments-search"
               aria-label="Search appointments"
               placeholder="Search patient, doctor, clinic..."
               value={search}
@@ -48,7 +47,6 @@ export default function AdminAppointments() {
               className={`${CONTROL_CLASS} w-full sm:w-64`}
             />
             <select
-              data-testid="admin-appointments-status-filter"
               aria-label="Filter by status"
               value={status}
               onChange={(e) => {
@@ -68,15 +66,15 @@ export default function AdminAppointments() {
 
       <div className="overflow-x-auto flex-grow mb-md">
         {appointments.length === 0 ? (
-          <div id="admin-no-appointments" data-testid="admin-no-appointments" className="p-xl text-center font-body-md text-secondary">
+          <div className="p-xl text-center font-body-md text-secondary">
             No appointments have been booked in the system.
           </div>
         ) : filtered.length === 0 ? (
-          <div data-testid="admin-no-matching-appointments" className="p-xl text-center font-body-md text-secondary">
+          <div className="p-xl text-center font-body-md text-secondary">
             No matching appointments found.
           </div>
         ) : (
-          <table id="admin-appointments-table" data-testid="admin-appointments-table" className="w-full text-left border-collapse">
+          <table className="w-full text-left border-collapse">
             <thead>
               <tr className="text-on-surface-variant font-label-sm text-label-sm border-b border-outline-variant uppercase tracking-wider bg-surface-container-low">
                 <th className="py-sm px-md font-semibold whitespace-nowrap">Patient</th>
@@ -87,12 +85,10 @@ export default function AdminAppointments() {
                 <th className="py-sm px-md font-semibold text-right whitespace-nowrap">Actions</th>
               </tr>
             </thead>
-            <tbody id="admin-appointments-list" data-testid="admin-appointments-list" className="font-body-sm text-body-sm text-on-surface">
+            <tbody className="font-body-sm text-body-sm text-on-surface">
               {pageItems.map((apt) => (
                 <tr
                   key={apt.id}
-                  id={`admin-apt-row-${apt.id}`}
-                  data-testid={`admin-appointment-item-${apt.id}`}
                   className="border-b border-surface-variant hover:bg-surface-container-low transition-colors"
                 >
                   <td className="py-md px-md">
@@ -107,8 +103,6 @@ export default function AdminAppointments() {
                   <td className="py-md px-md">{apt.date} at {apt.time}</td>
                   <td className="py-md px-md">
                     <span
-                      id={`admin-apt-status-${apt.id}`}
-                      data-testid={`admin-apt-status-${apt.id}`}
                       className={`font-label-sm text-label-sm px-2 py-1 rounded-full ${getStatusClass(apt.status)}`}
                     >
                       {apt.status}
@@ -116,15 +110,13 @@ export default function AdminAppointments() {
                   </td>
                   <td className="py-md px-md text-right whitespace-nowrap">
                     {apt.status === 'Cancelled' ? (
-                      <span id={`admin-cancelled-label-${apt.id}`} data-testid={`admin-cancelled-label-${apt.id}`} className="text-secondary font-label-sm text-label-sm">
+                      <span className="text-secondary font-label-sm text-label-sm">
                         --
                       </span>
                     ) : (
                       <div className="flex gap-2 justify-end">
                         {apt.status === 'Pending' && (
                           <button
-                            id={`admin-approve-${apt.id}`}
-                            data-testid={`admin-approve-${apt.id}`}
                             onClick={() => updateAppointmentStatus(apt.id, 'Approved')}
                             className="text-primary hover:bg-primary-container/20 px-3 py-1 rounded transition-colors font-label-sm text-label-sm border border-primary"
                           >
@@ -132,8 +124,6 @@ export default function AdminAppointments() {
                           </button>
                         )}
                         <button
-                          id={`admin-cancel-${apt.id}`}
-                          data-testid={`admin-cancel-${apt.id}`}
                           onClick={() => updateAppointmentStatus(apt.id, 'Cancelled')}
                           className="text-error hover:bg-error-container/50 px-3 py-1 rounded transition-colors font-label-sm text-label-sm border border-error"
                         >

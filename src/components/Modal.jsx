@@ -18,17 +18,15 @@ export default function Modal({ title, testId, onClose, children }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        data-testid={testId}
         className="bg-surface-container-lowest rounded-xl shadow-lg w-full max-w-md overflow-hidden"
       >
         <div className="px-lg py-md border-b border-outline-variant/30 flex justify-between items-center">
-          <h2 id={titleId} data-testid={`${testId}-title`} className="font-headline-sm text-headline-sm text-on-surface">
+          <h2 id={titleId} className="font-headline-sm text-headline-sm text-on-surface">
             {title}
           </h2>
           <button
             type="button"
             aria-label="Close"
-            data-testid={`${testId}-close`}
             onClick={onClose}
             className="text-on-surface-variant hover:text-error transition-colors"
           >

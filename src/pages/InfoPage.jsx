@@ -23,11 +23,11 @@ export default function InfoPage({ slug }) {
   const { title, body } = PAGES[slug];
 
   return (
-    <div id="info-page" data-testid="info-page" className="max-w-container-max mx-auto px-lg lg:px-xl py-xxl space-y-md">
-      <h1 id="info-title" data-testid="info-title" className="font-headline-md text-headline-md text-on-surface">
+    <div className="max-w-container-max mx-auto px-lg lg:px-xl py-xxl space-y-md">
+      <h1 className="font-headline-md text-headline-md text-on-surface">
         {title}
       </h1>
-      <p id="info-body" data-testid="info-body" className="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+      <p className="font-body-md text-body-md text-on-surface-variant max-w-2xl">
         {body}
       </p>
     </div>

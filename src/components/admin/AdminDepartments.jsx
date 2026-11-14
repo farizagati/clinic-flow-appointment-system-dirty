@@ -29,13 +29,12 @@ function DepartmentForm({ department, onClose, onSaved }) {
 
   return (
     <Modal title={isEdit ? 'Edit Department' : 'Add New Department'} testId={`${prefix}-modal`} onClose={onClose}>
-      <form onSubmit={handleSubmit} noValidate className="p-lg flex flex-col gap-md" data-testid={`${prefix}-form`}>
+      <form onSubmit={handleSubmit} noValidate className="p-lg flex flex-col gap-md">
         <div>
           <div className="floating-input relative">
             <input
               type="text"
               id={inputId}
-              data-testid={inputId}
               autoFocus
               value={name}
               onChange={(e) => {
@@ -54,8 +53,8 @@ function DepartmentForm({ department, onClose, onSaved }) {
           <FieldError message={error} fieldId={inputId} />
         </div>
         <div className="flex justify-end gap-sm mt-sm">
-          <button type="button" onClick={onClose} className="px-4 py-2 font-label-md text-label-md text-on-surface hover:bg-surface-container rounded-lg transition-colors" data-testid={`${prefix}-cancel`}>Cancel</button>
-          <button type="submit" className="px-4 py-2 font-label-md text-label-md bg-primary text-on-primary hover:bg-surface-tint rounded-lg transition-colors" data-testid={`${prefix}-submit`}>
+          <button type="button" onClick={onClose} className="px-4 py-2 font-label-md text-label-md text-on-surface hover:bg-surface-container rounded-lg transition-colors">Cancel</button>
+          <button type="submit" className="px-4 py-2 font-label-md text-label-md bg-primary text-on-primary hover:bg-surface-tint rounded-lg transition-colors">
             {isEdit ? 'Save Changes' : 'Save Department'}
           </button>
         </div>
@@ -93,15 +92,13 @@ export default function AdminDepartments({ onNotify }) {
   };
 
   return (
-    <section id="departments-section" data-testid="admin-departments-section" className="bg-surface-lowest rounded-xl shadow-sm border border-outline-variant p-lg flex flex-col overflow-hidden">
+    <section className="bg-surface-lowest rounded-xl shadow-sm border border-outline-variant p-lg flex flex-col overflow-hidden">
       <div className="flex justify-between items-center mb-md border-b border-surface-variant pb-sm gap-md">
-        <h2 data-testid="admin-departments-title" className="font-headline-md text-headline-md text-on-surface flex items-center gap-xs">
+        <h2 className="font-headline-md text-headline-md text-on-surface flex items-center gap-xs">
           <span className="material-symbols-outlined text-primary" aria-hidden="true">domain</span>
           Departments
         </h2>
         <button
-          id="admin-add-dept-btn"
-          data-testid="admin-add-dept-btn"
           onClick={() => {
             onNotify(null);
             setForm({});
@@ -114,7 +111,7 @@ export default function AdminDepartments({ onNotify }) {
       </div>
 
       <div className="overflow-x-auto flex-grow mb-md">
-        <table id="admin-depts-table" data-testid="admin-depts-table" className="w-full text-left border-collapse">
+        <table className="w-full text-left border-collapse">
           <thead>
             <tr className="text-on-surface-variant font-label-sm text-label-sm border-b border-outline-variant uppercase tracking-wider bg-surface-container-low">
               <th className="py-sm px-md font-semibold whitespace-nowrap">ID</th>
@@ -123,24 +120,21 @@ export default function AdminDepartments({ onNotify }) {
               <th className="py-sm px-md font-semibold text-right whitespace-nowrap">Actions</th>
             </tr>
           </thead>
-          <tbody id="admin-depts-list" data-testid="admin-depts-list" className="font-body-sm text-body-sm text-on-surface">
+          <tbody className="font-body-sm text-body-sm text-on-surface">
             {departments.map((d) => (
               <tr
                 key={d.id}
-                id={`admin-dept-row-${d.id}`}
-                data-testid={`dept-item-${d.id}`}
                 className="border-b border-surface-variant hover:bg-surface-container-low transition-colors"
               >
                 <td className="py-md px-md font-medium">{d.id}</td>
-                <td className="py-md px-md" data-testid={`dept-name-${d.id}`}>{d.name}</td>
-                <td className="py-md px-md" data-testid={`dept-doctor-count-${d.id}`}>{doctorCount(d.id)}</td>
+                <td className="py-md px-md">{d.name}</td>
+                <td className="py-md px-md">{doctorCount(d.id)}</td>
                 <td className="py-md px-md text-right whitespace-nowrap">
                   {isSeedDepartment(d.id) ? (
-                    <span data-testid={`dept-builtin-${d.id}`} className="text-secondary font-label-sm text-label-sm">Built-in</span>
+                    <span className="text-secondary font-label-sm text-label-sm">Built-in</span>
                   ) : (
                     <div className="flex gap-2 justify-end">
                       <button
-                        data-testid={`admin-edit-dept-${d.id}`}
                         onClick={() => {
                           onNotify(null);
                           setForm({ department: d });
@@ -150,7 +144,6 @@ export default function AdminDepartments({ onNotify }) {
                         Edit
                       </button>
                       <button
-                        data-testid={`admin-delete-dept-${d.id}`}
                         onClick={() => requestDelete(d)}
                         className="text-error hover:bg-error-container/50 px-3 py-1 rounded transition-colors font-label-sm text-label-sm border border-error"
                       >

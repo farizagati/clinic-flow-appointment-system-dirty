@@ -12,15 +12,7 @@ import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
  *
  * Props:
  *   id          {string}   id of the text input (used by the floating label).
- *   dataTestId  {string}   Base data-testid. Sub-elements are suffixed:
- *                            {base}               text input
- *                            {base}-toggle        open/close button
- *                            {base}-clear         clear button
- *                            {base}-listbox       suggestion list
- *                            {base}-loading       debounce pending row
- *                            {base}-empty         no results row
- *                            {base}-no-options    no options at all row
- *                            {base}-option-{id}   each option
+ *   dataTestId  {string}   Unused. Kept for parity with version A.
  *   label       {string}   Floating label text.
  *   options     {Array}    [{ id, name, meta? }]. Only `name` is searched; `meta` is display-only secondary text.
  *   value       {string}   Selected option id ('' for none).
@@ -30,7 +22,7 @@ import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
  *   error       {boolean}  Shows error styling.
  *   emptyText   {string}   Text shown when the search matches nothing.
  *   noOptionsText {string} Text shown when there are no options at all, whatever
- *                          was typed ({base}-no-options). Default: emptyText.
+ *                          was typed. Default: emptyText.
  *   disabled    {boolean}  Disables the field.
  *   describedBy {string}   aria-describedby for the input (e.g. the FieldError id).
  */
@@ -205,13 +197,10 @@ export default function SearchDropdown({
       ref={containerRef}
       className="floating-input relative"
       data-open={isOpen ? '' : undefined}
-      data-testid={`${dataTestId}-container`}
     >
       <input
         ref={inputRef}
         id={id}
-        data-testid={dataTestId}
-        data-selected-value={value || ''}
         type="text"
         role="combobox"
         autoComplete="off"
@@ -244,7 +233,6 @@ export default function SearchDropdown({
         {query && !disabled && (
           <button
             type="button"
-            data-testid={`${dataTestId}-clear`}
             aria-label="Clear selection"
             onClick={handleClear}
             className="p-1 rounded-full text-on-surface-variant hover:bg-surface-variant transition-colors flex items-center"
@@ -255,7 +243,6 @@ export default function SearchDropdown({
         <button
           type="button"
           tabIndex={-1}
-          data-testid={`${dataTestId}-toggle`}
           aria-label={isOpen ? 'Close list' : 'Open list'}
           disabled={disabled}
           onClick={() => {
@@ -279,13 +266,11 @@ export default function SearchDropdown({
           ref={listRef}
           id={listboxId}
           role="listbox"
-          data-testid={`${dataTestId}-listbox`}
           aria-label={label}
           className="absolute left-0 right-0 top-full mt-1 z-50 max-h-64 overflow-y-auto bg-surface-container-lowest border border-outline-variant rounded-lg shadow-[0px_8px_24px_rgba(0,0,0,0.12)] py-1"
         >
           {options.length === 0 ? (
             <li
-              data-testid={`${dataTestId}-no-options`}
               className="px-4 py-3 text-on-surface-variant font-body-sm"
               aria-live="polite"
             >
@@ -293,7 +278,6 @@ export default function SearchDropdown({
             </li>
           ) : showLoader ? (
             <li
-              data-testid={`${dataTestId}-loading`}
               className="px-4 py-3 flex items-center gap-2 text-on-surface-variant font-body-sm"
               aria-live="polite"
             >
@@ -302,7 +286,6 @@ export default function SearchDropdown({
             </li>
           ) : results.length === 0 ? (
             <li
-              data-testid={`${dataTestId}-empty`}
               className="px-4 py-3 text-on-surface-variant font-body-sm"
               aria-live="polite"
             >
@@ -319,7 +302,6 @@ export default function SearchDropdown({
                   role="option"
                   aria-selected={isSelected}
                   data-index={index}
-                  data-testid={`${dataTestId}-option-${option.id}`}
                   // mousedown + preventDefault keeps focus in the input.
                   onMouseDown={(e) => {
                     e.preventDefault();

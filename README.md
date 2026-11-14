@@ -1,8 +1,10 @@
-# ClinicFlow Appointment System
+# ClinicFlow Appointment System (Version B, dirty)
 
 > [!IMPORTANT]
 > **Practice Test Automation Sandbox**  
-> This application is specifically designed and optimized as a sandbox for practicing modern web test automation (e.g., Playwright, Cypress, Selenium, Robot Framework). It features pre-configured test accounts, dynamic UI elements, form validation rules, local storage persistence, and comprehensive `data-testid` attributes.
+> This is **version B** of ClinicFlow: the same app and flows as [version A](https://github.com/farizagati/clinic-flow-appointment-system), but with **no `data-testid` attributes** and a few hard-to-automate spots on purpose. Use it to practise locating elements the way you would in a real legacy app: by role, label, text and scoping.
+>
+> **Live app:** https://farizagati.github.io/clinic-flow-appointment-system-dirty/
 
 A modern, responsive healthcare appointment management application built with React, Vite, and Tailwind CSS. It serves as a realistic target for UI testing, end-to-end (E2E) automation, accessibility auditing, and state validation.
 
@@ -14,7 +16,7 @@ Get the application up and running locally in seconds:
 
 ```bash
 # 1. Clone the repository and navigate to the project directory
-cd clinic-flow-appointment-system
+cd clinic-flow-appointment-system-dirty
 
 # 2. Install dependencies
 npm install
@@ -23,7 +25,7 @@ npm install
 npm run dev
 ```
 
-Open your browser and navigate to `http://localhost:5173/clinic-flow-appointment-system/#/` (or the URL printed in your terminal).
+Open your browser and navigate to `http://localhost:5173/clinic-flow-appointment-system-dirty/#/` (or the URL printed in your terminal).
 
 ### Test Accounts
 The application is pre-seeded with mock data. Use the following credentials to test different user roles:
@@ -32,6 +34,21 @@ The application is pre-seeded with mock data. Use the following credentials to t
 | :--- | :--- | :--- | :--- |
 | **Patient (Member)** | `johnyjohnyyespapa@mail.com` | `EatingSugarNoPapa` | Book and manage personal appointments, edit settings |
 | **System Admin** | `admin@example.com` | `ThisIsNotAdmin` | View stats, approve/cancel all appointments, view user directory, manage departments and doctors |
+
+---
+
+## Differences from Version A
+
+| | Version A (clean) | Version B (dirty) |
+| :--- | :--- | :--- |
+| `data-testid` | On every interactable and asserted element | None |
+| Test hook `id`s | Many (`admin-approve-{id}`, `nav-settings`, ...) | Only ids the markup needs (label links, ARIA references) |
+| Theme toggle | Labelled "Switch to light/dark theme" | No accessible name |
+| Admin Approve / Cancel | Unique test id per row | Same name in every row, scope to the row first |
+| Review Appointment button | Stable id | id changes on every render |
+| localStorage keys | `clinicflow_*`, `theme` | `clinicflow_dirty_*` |
+
+Everything else (pages, text, page titles, validation, roles and labels) is the same, so a suite written with role and label locators should pass on both. See [AGENTS.md](AGENTS.md) for locator notes.
 
 ---
 
@@ -45,7 +62,7 @@ In the [Booking Page](./src/pages/BookAppointment.jsx), the doctor search field 
 
 ### 2. Date & Field Validation Assertions
 The booking form requires all fields to be filled and validates that the selected appointment date is not in the past relative to the client system date.
-*   **Test Idea:** Attempt to submit the booking form with a past date or missing fields, and assert that the warning alert (`data-testid="appointment-error"`) is visible and contains correct error messaging.
+*   **Test Idea:** Attempt to submit the booking form with a past date or missing fields, and assert that the warning alert (`getByRole('alert')`) is visible and contains correct error messaging.
 
 ### 3. Role-Based Navigation & Page Guards
 Different pages are protected under different navigation guards defined in [App.jsx](./src/App.jsx).
@@ -66,10 +83,10 @@ Supports theme switching between Light and Dark modes via the theme toggle butto
 Below is an overview of the key files and directories:
 
 ```
-clinic-flow-appointment-system/
+clinic-flow-appointment-system-dirty/
 ├── index.html                  # Main entry page structure and font imports
 ├── package.json                # Project dependencies and npm scripts
-├── vite.config.js              # Vite configuration (sets base path to /clinic-flow-appointment-system/)
+├── vite.config.js              # Vite configuration (sets base path to /clinic-flow-appointment-system-dirty/)
 ├── tailwind.config.js          # Custom Tailwind configuration (colors, spacing, typography)
 ├── postcss.config.js           # PostCSS setup
 └── src/

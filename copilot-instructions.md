@@ -2,7 +2,7 @@
 
 This file indexes available skills and their auto-trigger keywords.
 
-**For project rules, conventions, data-testid requirements, testing guidelines, and other project standards, see [AGENTS.md](AGENTS.md).**
+**For project rules, conventions, the no test id rule, testing guidelines, and other project standards, see [AGENTS.md](AGENTS.md).**
 
 ---
 

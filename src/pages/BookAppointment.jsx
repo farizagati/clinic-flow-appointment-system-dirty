@@ -313,8 +313,10 @@ export default function BookAppointment() {
                 >
                   Cancel
                 </button>
+                {/* Hard spot (version B): the id changes on every render. */}
                 <button
                   type="submit"
+                  id={`btn-review-${Math.random().toString(36).slice(2, 8)}`}
                   className="font-label-md text-label-md px-6 py-3 rounded-lg bg-primary text-on-primary hover:bg-surface-tint transition-colors shadow-[0px_4px_12px_rgba(0,0,0,0.08)] hover:shadow-[0px_8px_24px_rgba(0,0,0,0.12)] order-1 sm:order-2 flex items-center justify-center gap-sm active:scale-[0.98]"
                 >
                   Review Appointment

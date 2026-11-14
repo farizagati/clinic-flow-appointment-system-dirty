@@ -41,9 +41,9 @@ export default function Navigation() {
       </div>
 
       <div className="flex items-center gap-sm">
+        {/* Hard spot (version B): icon-only button with no accessible name. */}
         <button
           onClick={toggleTheme}
-          aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
           className="p-sm text-secondary hover:bg-primary-container/10 rounded-full transition-colors flex items-center justify-center"
         >
           <span className="material-symbols-outlined" aria-hidden="true">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>

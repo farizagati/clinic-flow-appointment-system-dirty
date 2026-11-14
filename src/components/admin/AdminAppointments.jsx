@@ -114,6 +114,8 @@ export default function AdminAppointments() {
                         --
                       </span>
                     ) : (
+                      // Hard spot (version B): every row repeats the same "Approve" and
+                      // "Cancel" buttons with no row-specific name. Scope to the row first.
                       <div className="flex gap-2 justify-end">
                         {apt.status === 'Pending' && (
                           <button

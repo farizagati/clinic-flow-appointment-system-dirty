@@ -6,7 +6,7 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(() => {
     try {
-      const stored = localStorage.getItem('clinicflow_currentUser');
+      const stored = localStorage.getItem('clinicflow_dirty_currentUser');
       return stored ? JSON.parse(stored) : null;
     } catch {
       return null;
@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
 
   const [users, setUsers] = useState(() => {
     try {
-      const stored = localStorage.getItem('clinicflow_users');
+      const stored = localStorage.getItem('clinicflow_dirty_users');
       return stored ? JSON.parse(stored) : [];
     } catch {
       return [];
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
 
   const [appointments, setAppointments] = useState(() => {
     try {
-      const stored = localStorage.getItem('clinicflow_appointments');
+      const stored = localStorage.getItem('clinicflow_dirty_appointments');
       return stored ? JSON.parse(stored) : [];
     } catch {
       return [];
@@ -63,11 +63,11 @@ export const AuthProvider = ({ children }) => {
     ];
 
     try {
-      const stored = localStorage.getItem('clinicflow_users');
+      const stored = localStorage.getItem('clinicflow_dirty_users');
       const parsed = stored ? JSON.parse(stored) : [];
       
       if (!parsed || parsed.length === 0) {
-        localStorage.setItem('clinicflow_users', JSON.stringify(defaultUsers));
+        localStorage.setItem('clinicflow_dirty_users', JSON.stringify(defaultUsers));
         setUsers(defaultUsers);
       } else {
         // Ensure default users exist in current list
@@ -80,14 +80,14 @@ export const AuthProvider = ({ children }) => {
           }
         });
         if (changed) {
-          localStorage.setItem('clinicflow_users', JSON.stringify(updated));
+          localStorage.setItem('clinicflow_dirty_users', JSON.stringify(updated));
           setUsers(updated);
         } else {
           setUsers(parsed);
         }
       }
     } catch {
-      localStorage.setItem('clinicflow_users', JSON.stringify(defaultUsers));
+      localStorage.setItem('clinicflow_dirty_users', JSON.stringify(defaultUsers));
       setUsers(defaultUsers);
     }
   }, []);
@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }) => {
   // Sync users change
   const refreshUsersList = () => {
     try {
-      const stored = localStorage.getItem('clinicflow_users');
+      const stored = localStorage.getItem('clinicflow_dirty_users');
       if (stored) {
         setUsers(JSON.parse(stored));
       }
@@ -108,7 +108,7 @@ export const AuthProvider = ({ children }) => {
     // Read from localStorage to ensure we get registered users dynamically
     let latestUsers = users;
     try {
-      const stored = localStorage.getItem('clinicflow_users');
+      const stored = localStorage.getItem('clinicflow_dirty_users');
       if (stored) {
         latestUsers = JSON.parse(stored);
       }
@@ -133,7 +133,7 @@ export const AuthProvider = ({ children }) => {
       emergencyPhone: foundUser.emergencyPhone || '+1 (555) 987-6543',
       profilePic: foundUser.profilePic || null,
     };
-    localStorage.setItem('clinicflow_currentUser', JSON.stringify(userSession));
+    localStorage.setItem('clinicflow_dirty_currentUser', JSON.stringify(userSession));
     setCurrentUser(userSession);
     return userSession;
   };
@@ -141,7 +141,7 @@ export const AuthProvider = ({ children }) => {
   const register = (email, name, password, role = 'member') => {
     let latestUsers = users;
     try {
-      const stored = localStorage.getItem('clinicflow_users');
+      const stored = localStorage.getItem('clinicflow_dirty_users');
       if (stored) {
         latestUsers = JSON.parse(stored);
       }
@@ -166,13 +166,13 @@ export const AuthProvider = ({ children }) => {
       profilePic: null,
     };
     const updatedUsers = [...latestUsers, newUser];
-    localStorage.setItem('clinicflow_users', JSON.stringify(updatedUsers));
+    localStorage.setItem('clinicflow_dirty_users', JSON.stringify(updatedUsers));
     setUsers(updatedUsers);
     return newUser;
   };
 
   const logout = () => {
-    localStorage.removeItem('clinicflow_currentUser');
+    localStorage.removeItem('clinicflow_dirty_currentUser');
     setCurrentUser(null);
   };
 
@@ -195,14 +195,14 @@ export const AuthProvider = ({ children }) => {
 
     let latestAppointments = appointments;
     try {
-      const stored = localStorage.getItem('clinicflow_appointments');
+      const stored = localStorage.getItem('clinicflow_dirty_appointments');
       if (stored) {
         latestAppointments = JSON.parse(stored);
       }
     } catch {}
 
     const updatedAppointments = [...latestAppointments, newAppointment];
-    localStorage.setItem('clinicflow_appointments', JSON.stringify(updatedAppointments));
+    localStorage.setItem('clinicflow_dirty_appointments', JSON.stringify(updatedAppointments));
     setAppointments(updatedAppointments);
     return newAppointment;
   };
@@ -210,7 +210,7 @@ export const AuthProvider = ({ children }) => {
   const cancelAppointment = (appointmentId) => {
     let latestAppointments = appointments;
     try {
-      const stored = localStorage.getItem('clinicflow_appointments');
+      const stored = localStorage.getItem('clinicflow_dirty_appointments');
       if (stored) {
         latestAppointments = JSON.parse(stored);
       }
@@ -222,14 +222,14 @@ export const AuthProvider = ({ children }) => {
       }
       return apt;
     });
-    localStorage.setItem('clinicflow_appointments', JSON.stringify(updated));
+    localStorage.setItem('clinicflow_dirty_appointments', JSON.stringify(updated));
     setAppointments(updated);
   };
 
   const updateAppointmentStatus = (appointmentId, status) => {
     let latestAppointments = appointments;
     try {
-      const stored = localStorage.getItem('clinicflow_appointments');
+      const stored = localStorage.getItem('clinicflow_dirty_appointments');
       if (stored) {
         latestAppointments = JSON.parse(stored);
       }
@@ -241,7 +241,7 @@ export const AuthProvider = ({ children }) => {
       }
       return apt;
     });
-    localStorage.setItem('clinicflow_appointments', JSON.stringify(updated));
+    localStorage.setItem('clinicflow_dirty_appointments', JSON.stringify(updated));
     setAppointments(updated);
   };
 
@@ -250,7 +250,7 @@ export const AuthProvider = ({ children }) => {
     
     let latestUsers = users;
     try {
-      const stored = localStorage.getItem('clinicflow_users');
+      const stored = localStorage.getItem('clinicflow_dirty_users');
       if (stored) {
         latestUsers = JSON.parse(stored);
       }
@@ -274,7 +274,7 @@ export const AuthProvider = ({ children }) => {
       }
       return u;
     });
-    localStorage.setItem('clinicflow_users', JSON.stringify(updatedUsers));
+    localStorage.setItem('clinicflow_dirty_users', JSON.stringify(updatedUsers));
     setUsers(updatedUsers);
 
     // Update currentUser session
@@ -289,15 +289,15 @@ export const AuthProvider = ({ children }) => {
       emergencyPhone: profileData.emergencyPhone !== undefined ? profileData.emergencyPhone : currentUser.emergencyPhone,
       profilePic: profileData.profilePic !== undefined ? profileData.profilePic : currentUser.profilePic,
     };
-    localStorage.setItem('clinicflow_currentUser', JSON.stringify(updatedSession));
+    localStorage.setItem('clinicflow_dirty_currentUser', JSON.stringify(updatedSession));
     setCurrentUser(updatedSession);
   };
 
   const [clinics, setClinics] = useState(() => {
     try {
-      const stored = localStorage.getItem('clinicflow_clinics');
+      const stored = localStorage.getItem('clinicflow_dirty_clinics');
       if (stored) return JSON.parse(stored);
-      localStorage.setItem('clinicflow_clinics', JSON.stringify(CLINICS));
+      localStorage.setItem('clinicflow_dirty_clinics', JSON.stringify(CLINICS));
       return CLINICS;
     } catch {
       return CLINICS;
@@ -306,9 +306,9 @@ export const AuthProvider = ({ children }) => {
 
   const [departments, setDepartments] = useState(() => {
     try {
-      const stored = localStorage.getItem('clinicflow_departments');
+      const stored = localStorage.getItem('clinicflow_dirty_departments');
       if (stored) return JSON.parse(stored);
-      localStorage.setItem('clinicflow_departments', JSON.stringify(DEPARTMENTS));
+      localStorage.setItem('clinicflow_dirty_departments', JSON.stringify(DEPARTMENTS));
       return DEPARTMENTS;
     } catch {
       return DEPARTMENTS;
@@ -317,7 +317,7 @@ export const AuthProvider = ({ children }) => {
 
   const [doctors, setDoctors] = useState(() => {
     try {
-      const stored = localStorage.getItem('clinicflow_doctors');
+      const stored = localStorage.getItem('clinicflow_dirty_doctors');
       if (stored) {
         // Seed doctors always come from mockData, so renamed, added or removed
         // seed entries reach browsers with older data. Doctors created by the
@@ -326,11 +326,11 @@ export const AuthProvider = ({ children }) => {
         const adminCreated = parsed.filter((d) => /^dr-\d+$/.test(d.id));
         const merged = [...DOCTORS, ...adminCreated];
         if (JSON.stringify(merged) !== stored) {
-          localStorage.setItem('clinicflow_doctors', JSON.stringify(merged));
+          localStorage.setItem('clinicflow_dirty_doctors', JSON.stringify(merged));
         }
         return merged;
       }
-      localStorage.setItem('clinicflow_doctors', JSON.stringify(DOCTORS));
+      localStorage.setItem('clinicflow_dirty_doctors', JSON.stringify(DOCTORS));
       return DOCTORS;
     } catch {
       return DOCTORS;
@@ -342,12 +342,12 @@ export const AuthProvider = ({ children }) => {
 
   const saveDepartments = (updated) => {
     setDepartments(updated);
-    localStorage.setItem('clinicflow_departments', JSON.stringify(updated));
+    localStorage.setItem('clinicflow_dirty_departments', JSON.stringify(updated));
   };
 
   const saveDoctors = (updated) => {
     setDoctors(updated);
-    localStorage.setItem('clinicflow_doctors', JSON.stringify(updated));
+    localStorage.setItem('clinicflow_dirty_doctors', JSON.stringify(updated));
   };
 
   const validateDepartmentName = (name, ignoreId) => {
@@ -421,12 +421,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   const purgeAndResetData = () => {
-    localStorage.removeItem('clinicflow_currentUser');
-    localStorage.removeItem('clinicflow_users');
-    localStorage.removeItem('clinicflow_appointments');
-    localStorage.removeItem('clinicflow_clinics');
-    localStorage.removeItem('clinicflow_departments');
-    localStorage.removeItem('clinicflow_doctors');
+    localStorage.removeItem('clinicflow_dirty_currentUser');
+    localStorage.removeItem('clinicflow_dirty_users');
+    localStorage.removeItem('clinicflow_dirty_appointments');
+    localStorage.removeItem('clinicflow_dirty_clinics');
+    localStorage.removeItem('clinicflow_dirty_departments');
+    localStorage.removeItem('clinicflow_dirty_doctors');
 
     const defaultUsers = [
       {
@@ -457,10 +457,10 @@ export const AuthProvider = ({ children }) => {
       },
     ];
 
-    localStorage.setItem('clinicflow_users', JSON.stringify(defaultUsers));
-    localStorage.setItem('clinicflow_clinics', JSON.stringify(CLINICS));
-    localStorage.setItem('clinicflow_departments', JSON.stringify(DEPARTMENTS));
-    localStorage.setItem('clinicflow_doctors', JSON.stringify(DOCTORS));
+    localStorage.setItem('clinicflow_dirty_users', JSON.stringify(defaultUsers));
+    localStorage.setItem('clinicflow_dirty_clinics', JSON.stringify(CLINICS));
+    localStorage.setItem('clinicflow_dirty_departments', JSON.stringify(DEPARTMENTS));
+    localStorage.setItem('clinicflow_dirty_doctors', JSON.stringify(DOCTORS));
 
     setCurrentUser(null);
     setUsers(defaultUsers);

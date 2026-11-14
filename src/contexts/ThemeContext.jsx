@@ -9,7 +9,7 @@ export function useTheme() {
 export function ThemeProvider({ children }) {
   // Default to 'dark' mode as per the requirements
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 'dark';
+    return localStorage.getItem('clinicflow_dirty_theme') || 'dark';
   });
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export function ThemeProvider({ children }) {
       root.classList.add('light');
       root.classList.remove('dark');
     }
-    localStorage.setItem('theme', theme);
+    localStorage.setItem('clinicflow_dirty_theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {

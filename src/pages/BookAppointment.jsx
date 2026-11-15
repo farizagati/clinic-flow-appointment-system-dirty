@@ -1,0 +1,333 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { TIME_SLOTS } from '../data/mockData';
+import { FieldError } from '../components/FieldError';
+import CustomDatePicker from '../components/CustomDatePicker';
+import SearchDropdown from '../components/SearchDropdown';
+
+export default function BookAppointment() {
+  const { clinics, departments, doctors } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const [clinic, setClinic] = useState(location.state?.clinic || '');
+  const [department, setDepartment] = useState(location.state?.department || '');
+  const [doctor, setDoctor] = useState(location.state?.doctor || '');
+  const [date, setDate] = useState(location.state?.date || '');
+  const [time, setTime] = useState(location.state?.time || '');
+  const [notes, setNotes] = useState(location.state?.notes || '');
+
+  const [filteredDoctors, setFilteredDoctors] = useState(doctors);
+  const [error, setError] = useState(''); // top-level server/auth error
+  const [success, setSuccess] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({
+    clinic: '',
+    department: '',
+    doctor: '',
+    date: '',
+    time: '',
+  });
+
+  // Dynamic doctor filtering based on clinic and department
+  useEffect(() => {
+    let result = doctors;
+    if (clinic) {
+      result = result.filter((d) => d.clinicId === clinic);
+    }
+    if (department) {
+      result = result.filter((d) => d.departmentId === department);
+    }
+    setFilteredDoctors(result);
+
+    // Reset selected doctor if it's no longer in the filtered list
+    if (doctor && !result.some((d) => d.id === doctor)) {
+      setDoctor('');
+    }
+  }, [clinic, department]);
+
+  const validate = () => {
+    const errors = { clinic: '', department: '', doctor: '', date: '', time: '' };
+    let valid = true;
+
+    if (!clinic) {
+      errors.clinic = 'Please select a clinic';
+      valid = false;
+    }
+    if (!department) {
+      errors.department = 'Please select a department';
+      valid = false;
+    }
+    if (!doctor) {
+      errors.doctor = 'Please select a doctor';
+      valid = false;
+    }
+    if (!date) {
+      errors.date = 'Please select an appointment date';
+      valid = false;
+    } else {
+      const selectedDate = new Date(date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (selectedDate < today) {
+        errors.date = 'Appointment date cannot be in the past';
+        valid = false;
+      }
+    }
+    if (!time) {
+      errors.time = 'Please select a time slot';
+      valid = false;
+    }
+
+    setFieldErrors(errors);
+    return valid;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+
+    if (!validate()) return;
+
+    try {
+      const selectedClinicObj = clinics.find((c) => c.id === clinic);
+      const selectedDepartmentObj = departments.find((s) => s.id === department);
+      const selectedDoctorObj = doctors.find((d) => d.id === doctor);
+
+      // Navigate to review screen
+      navigate('/book-appointment/review', {
+        state: {
+          clinic,
+          clinicName: selectedClinicObj.name,
+          department,
+          departmentName: selectedDepartmentObj.name,
+          doctor,
+          doctorName: selectedDoctorObj.name,
+          date,
+          time,
+          notes,
+        },
+      });
+    } catch (err) {
+      setError(err.message || 'Failed to proceed to review');
+    }
+  };
+
+  // Clear per-field error when user interacts with the field
+  const clearFieldError = (field) => {
+    if (fieldErrors[field]) {
+      setFieldErrors((prev) => ({ ...prev, [field]: '' }));
+    }
+  };
+
+  return (
+    <div className="flex-grow flex flex-col w-full h-full">
+      <div className="flex-grow flex items-center justify-center p-md md:p-gutter w-full max-w-container-max mx-auto">
+        <div className="w-full max-w-3xl bg-surface-container-lowest rounded-xl shadow-[0px_4px_12px_rgba(0,0,0,0.08)] relative z-[10]">
+          {/* Decorative Header Accent */}
+          <div className="h-2 w-full bg-primary-container rounded-t-xl"></div>
+          
+          <div className="p-lg md:p-xl">
+            <div className="mb-gutter text-center">
+              <h1 className="font-headline-md text-headline-md text-on-surface mb-sm">
+                Schedule Your Visit
+              </h1>
+              <p className="font-body-md text-body-md text-on-surface-variant">Please provide your details to secure an appointment slot.</p>
+            </div>
+
+            {error && (
+              <div role="alert" className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-sm">
+                {error}
+              </div>
+            )}
+
+            {success && (
+              <div role="status" className="mb-md p-sm bg-primary-container/20 text-on-primary-container rounded-lg font-body-sm">
+                {success}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} noValidate className="space-y-gutter">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
+                
+                {/* Clinic Selection */}
+                <div className="col-span-1 md:col-span-2">
+                  <div className="floating-input relative">
+                    <select
+                      id="appointment-clinic"
+                      value={clinic}
+                      onChange={(e) => { setClinic(e.target.value); clearFieldError('clinic'); }}
+                      className={`w-full h-14 px-4 bg-transparent border rounded-lg text-on-surface focus:outline-none transition-colors appearance-none cursor-pointer ${
+                        clinic ? 'has-value' : ''
+                      } ${
+                        fieldErrors.clinic ? 'input-error' : 'border-outline'
+                      }`}
+                      aria-invalid={!!fieldErrors.clinic}
+                      aria-describedby={fieldErrors.clinic ? 'appointment-clinic-error' : undefined}
+                    >
+                      <option value="" disabled hidden></option>
+                      {clinics.map((c) => (
+                        <option key={c.id} value={c.id}>{c.name}</option>
+                      ))}
+                    </select>
+                    <label htmlFor="appointment-clinic" className="absolute left-3 top-1/2 -translate-y-1/2 font-body-md text-body-md text-on-surface-variant transition-all pointer-events-none px-1 rounded-sm">
+                      Select Clinic *
+                    </label>
+                    <span aria-hidden="true" className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+                  </div>
+                  <FieldError message={fieldErrors.clinic} fieldId="appointment-clinic" />
+                </div>
+
+                {/* Department Selection */}
+                <div>
+                  <div className="floating-input relative">
+                    <select
+                      id="appointment-department"
+                      value={department}
+                      onChange={(e) => { setDepartment(e.target.value); clearFieldError('department'); }}
+                      className={`w-full h-14 px-4 bg-transparent border rounded-lg text-on-surface focus:outline-none transition-colors appearance-none cursor-pointer ${
+                        department ? 'has-value' : ''
+                      } ${
+                        fieldErrors.department ? 'input-error' : 'border-outline'
+                      }`}
+                      aria-invalid={!!fieldErrors.department}
+                      aria-describedby={fieldErrors.department ? 'appointment-department-error' : undefined}
+                    >
+                      <option value="" disabled hidden></option>
+                      {departments.map((s) => (
+                        <option key={s.id} value={s.id}>{s.name}</option>
+                      ))}
+                    </select>
+                    <label htmlFor="appointment-department" className="absolute left-3 top-1/2 -translate-y-1/2 font-body-md text-body-md text-on-surface-variant transition-all pointer-events-none px-1 rounded-sm">
+                      Select Department *
+                    </label>
+                    <span aria-hidden="true" className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+                  </div>
+                  <FieldError message={fieldErrors.department} fieldId="appointment-department" />
+                </div>
+
+                {/* Doctor Selection */}
+                <div>
+                  <SearchDropdown
+                    id="appointment-doctor"
+                    dataTestId="appointment-doctor"
+                    label="Search Doctor *"
+                    options={filteredDoctors.map((d) => ({
+                      id: d.id,
+                      name: d.name,
+                      meta: [
+                        departments.find((dep) => dep.id === d.departmentId)?.name,
+                        clinics.find((c) => c.id === d.clinicId)?.name,
+                      ].filter(Boolean).join(' - '),
+                    }))}
+                    value={doctor}
+                    onChange={(id) => { setDoctor(id); if (id) clearFieldError('doctor'); }}
+                    debounceMs={400}
+                    error={!!fieldErrors.doctor}
+                    describedBy={fieldErrors.doctor ? 'appointment-doctor-error' : undefined}
+                    emptyText="No doctors match your search"
+                    noOptionsText="No doctors available for this clinic and department."
+                  />
+                  {clinic && department && filteredDoctors.length === 0 && (
+                    <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+                      No doctors available for this clinic and department.
+                    </p>
+                  )}
+                  <FieldError message={fieldErrors.doctor} fieldId="appointment-doctor" />
+                </div>
+
+                {/* Date Picker */}
+                <div>
+                  <CustomDatePicker
+                    id="appointment-date"
+                    dataTestId="appointment-date"
+                    value={date}
+                    onChange={(val) => { setDate(val); clearFieldError('date'); }}
+                    formatStr="yyyy-MM-dd"
+                    disabled={{ before: new Date() }}
+                    captionLayout="dropdown"
+                    startMonth={new Date()}
+                    endMonth={new Date(new Date().getFullYear() + 2, 11)}
+                    inputClassName={`w-full h-14 px-4 bg-transparent border rounded-lg text-on-surface focus:outline-none transition-colors peer [color-scheme:light] dark:[color-scheme:dark] ${
+                      fieldErrors.date ? 'input-error' : 'border-outline'
+                    }`}
+                    containerClassName="w-full"
+                    label="Appointment Date *"
+                    isFloatingLabel={true}
+                    error={!!fieldErrors.date}
+                  />
+                  <FieldError message={fieldErrors.date} fieldId="appointment-date" />
+                </div>
+
+                {/* Time Picker */}
+                <div>
+                  <div className="floating-input relative">
+                    <select
+                      id="appointment-time"
+                      value={time}
+                      onChange={(e) => { setTime(e.target.value); clearFieldError('time'); }}
+                      className={`w-full h-14 px-4 bg-transparent border rounded-lg text-on-surface focus:outline-none transition-colors appearance-none cursor-pointer ${
+                        time ? 'has-value' : ''
+                      } ${
+                        fieldErrors.time ? 'input-error' : 'border-outline'
+                      }`}
+                      aria-invalid={!!fieldErrors.time}
+                      aria-describedby={fieldErrors.time ? 'appointment-time-error' : undefined}
+                    >
+                      <option value="" disabled hidden></option>
+                      {TIME_SLOTS.map((t) => (
+                        <option key={t} value={t}>{t}</option>
+                      ))}
+                    </select>
+                    <label htmlFor="appointment-time" className="absolute left-3 top-1/2 -translate-y-1/2 font-body-md text-body-md text-on-surface-variant transition-all pointer-events-none px-1 rounded-sm">
+                      Select Time Slot *
+                    </label>
+                    <span aria-hidden="true" className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+                  </div>
+                  <FieldError message={fieldErrors.time} fieldId="appointment-time" />
+                </div>
+                
+                {/* Notes Input */}
+                <div className="floating-input relative col-span-1 md:col-span-2">
+                  <textarea
+                    id="appointment-notes"
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    className="w-full p-4 bg-transparent border border-outline rounded-lg text-on-surface focus:outline-none transition-colors peer resize-none h-24"
+                    placeholder=" "
+                  ></textarea>
+                  <label htmlFor="appointment-notes" className="absolute left-3 top-0 -translate-y-1/2 scale-85 bg-surface-container-lowest px-1 rounded-sm font-body-md text-body-md text-on-surface-variant transition-all duration-200 pointer-events-none peer-placeholder-shown:top-4 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-85 peer-focus:text-primary">
+                    Reason / Notes (Optional)
+                  </label>
+                </div>
+
+              </div>
+
+              {/* Submit Actions */}
+              <div className="pt-lg flex flex-col sm:flex-row justify-end gap-md">
+                <button
+                  type="button"
+                  onClick={() => navigate('/my-appointments')}
+                  className="font-label-md text-label-md px-6 py-3 rounded-lg text-on-surface hover:bg-surface-container transition-colors order-2 sm:order-1 active:scale-[0.98]"
+                >
+                  Cancel
+                </button>
+                {/* Hard spot (version B): the id changes on every render. */}
+                <button
+                  type="submit"
+                  id={`btn-review-${Math.random().toString(36).slice(2, 8)}`}
+                  className="font-label-md text-label-md px-6 py-3 rounded-lg bg-primary text-on-primary hover:bg-surface-tint transition-colors shadow-[0px_4px_12px_rgba(0,0,0,0.08)] hover:shadow-[0px_8px_24px_rgba(0,0,0,0.12)] order-1 sm:order-2 flex items-center justify-center gap-sm active:scale-[0.98]"
+                >
+                  Review Appointment
+                  <span aria-hidden="true" className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

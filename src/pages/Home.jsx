@@ -1,0 +1,180 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import SearchDropdown from '../components/SearchDropdown';
+import heroImage from '../assets/hero-clinic.svg';
+
+export default function Home() {
+  const { currentUser, doctors, departments, clinics } = useAuth();
+  const navigate = useNavigate();
+  const [doctorId, setDoctorId] = useState('');
+
+  const departmentName = (id) => departments.find((d) => d.id === id)?.name || id;
+  const clinicName = (id) => clinics.find((c) => c.id === id)?.name || id;
+  const selectedDoctor = doctors.find((d) => d.id === doctorId);
+
+  const handleBookDoctor = () => {
+    if (!currentUser) {
+      navigate('/login');
+      return;
+    }
+    navigate('/book-appointment', {
+      state: {
+        clinic: selectedDoctor.clinicId,
+        department: selectedDoctor.departmentId,
+        doctor: selectedDoctor.id,
+      },
+    });
+  };
+
+  const handleCtaClick = () => {
+    if (currentUser) {
+      if (currentUser.role === 'admin') {
+        navigate('/admin-dashboard');
+      } else {
+        navigate('/book-appointment');
+      }
+    } else {
+      navigate('/login');
+    }
+  };
+
+  return (
+    <div className="flex-grow">
+      {/* Hero Section */}
+      <section className="relative pt-xxl pb-xxl overflow-hidden bg-gradient-to-br from-surface-container-low to-surface-container">
+        <div className="max-w-container-max mx-auto px-lg lg:px-xl grid md:grid-cols-2 gap-xl items-center relative z-10">
+          <div className="space-y-lg">
+            <div className="inline-flex items-center gap-sm bg-primary-container/10 text-primary px-sm py-xs rounded-full font-label-sm text-label-sm font-semibold">
+              <span aria-hidden="true" className="material-symbols-outlined text-[16px]">verified</span>
+              Trusted by 500+ Clinics
+            </div>
+            
+            <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">
+              Your Health,<br /><span className="text-primary">Simplified.</span>
+            </h1>
+            
+            <p className="font-body-lg text-body-lg text-on-surface-variant max-w-md">
+              Experience seamless healthcare management. Book, track, and manage your clinical appointments with modern precision and clarity.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-md pt-sm">
+              <button 
+                onClick={handleCtaClick}
+                className="px-lg py-md bg-primary text-on-primary rounded-lg font-label-md text-label-md shadow-[0px_4px_12px_rgba(0,0,0,0.08)] hover:shadow-[0px_8px_24px_rgba(0,0,0,0.12)] transition-all active:scale-95 flex items-center justify-center gap-sm"
+              >
+                {currentUser 
+                  ? (currentUser.role === 'admin' ? 'Go to Admin Dashboard' : 'Book Your First Appointment') 
+                  : 'Book Your First Appointment'
+                }
+                <span aria-hidden="true" className="material-symbols-outlined">arrow_forward</span>
+              </button>
+              <button
+                onClick={() => document.getElementById('home-features')?.scrollIntoView({ behavior: 'smooth' })}
+                className="px-lg py-md bg-surface text-on-surface border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-surface-container-high transition-all active:scale-95 flex items-center justify-center">
+                Learn More
+              </button>
+            </div>
+          </div>
+          
+          <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-[0px_8px_24px_rgba(0,0,0,0.12)]">
+            <img 
+              alt="Illustration of a clinic reception area" 
+              className="absolute inset-0 w-full h-full object-cover" 
+              src={heroImage}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Doctor Search Section */}
+      <section className="py-xl bg-surface-container-low">
+        <div className="max-w-2xl mx-auto px-lg">
+          <div className="text-center mb-lg space-y-sm">
+            <h2 className="font-headline-md text-headline-md text-on-surface">Find a Doctor</h2>
+            <p className="font-body-md text-body-md text-on-surface-variant">Search our doctors by name to see where they practice.</p>
+          </div>
+
+          <SearchDropdown
+            id="home-doctor-search"
+            dataTestId="home-doctor-search"
+            label="Doctor Name"
+            options={doctors.map((d) => ({
+              id: d.id,
+              name: d.name,
+              meta: `${departmentName(d.departmentId)} - ${clinicName(d.clinicId)}`,
+            }))}
+            value={doctorId}
+            onChange={setDoctorId}
+            debounceMs={400}
+            showSearching={false}
+            emptyText="No doctors match your search."
+          />
+
+          {selectedDoctor && (
+            <div className="mt-md bg-surface rounded-xl border border-outline-variant p-md flex flex-col sm:flex-row sm:items-center justify-between gap-md">
+              <div>
+                <p className="font-headline-sm text-headline-sm text-on-surface">{selectedDoctor.name}</p>
+                <p className="font-body-sm text-body-sm text-on-surface-variant">
+                  <span>{departmentName(selectedDoctor.departmentId)}</span>
+                  {' at '}
+                  <span>{clinicName(selectedDoctor.clinicId)}</span>
+                </p>
+              </div>
+              {currentUser?.role !== 'admin' && (
+                <button
+                  onClick={handleBookDoctor}
+                  className="px-md py-sm bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-surface-tint transition-colors whitespace-nowrap"
+                >
+                  {currentUser ? 'Book with this doctor' : 'Log in to book'}
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="home-features" className="py-xxl bg-background">
+        <div className="max-w-container-max mx-auto px-lg lg:px-xl">
+          <div className="text-center mb-xl space-y-sm">
+            <h2 className="font-headline-md text-headline-md text-on-surface">Application Features</h2>
+            <p className="font-body-md text-body-md text-on-surface-variant max-w-xl mx-auto">Three simple steps to secure your healthcare consultation. Designed for speed, reliability, and peace of mind.</p>
+          </div>
+          
+          <ul className="grid md:grid-cols-3 gap-lg list-none p-0">
+            {/* Feature 1 */}
+            <li className="bg-surface p-xl rounded-2xl border border-outline-variant hover:border-primary transition-colors shadow-[0px_4px_12px_rgba(0,0,0,0.08)] group relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary-container/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+              <div className="w-14 h-14 bg-surface-container-high rounded-xl flex items-center justify-center mb-lg text-primary relative z-10 group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                <span aria-hidden="true" className="material-symbols-outlined text-[28px]">search</span>
+              </div>
+              <h3 className="font-headline-sm text-headline-sm text-on-surface mb-sm relative z-10">1. Find a Specialist</h3>
+              <p className="font-body-sm text-body-sm text-on-surface-variant relative z-10">Search through our verified network of healthcare professionals by department, location, or availability.</p>
+            </li>
+            
+            {/* Feature 2 */}
+            <li className="bg-surface p-xl rounded-2xl border border-outline-variant hover:border-primary transition-colors shadow-[0px_4px_12px_rgba(0,0,0,0.08)] group relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary-container/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+              <div className="w-14 h-14 bg-surface-container-high rounded-xl flex items-center justify-center mb-lg text-primary relative z-10 group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                <span aria-hidden="true" className="material-symbols-outlined text-[28px]">schedule</span>
+              </div>
+              <h3 className="font-headline-sm text-headline-sm text-on-surface mb-sm relative z-10">2. Choose a Time</h3>
+              <p className="font-body-sm text-body-sm text-on-surface-variant relative z-10">View real-time availability and select a time slot that fits seamlessly into your busy schedule.</p>
+            </li>
+            
+            {/* Feature 3 */}
+            <li className="bg-surface p-xl rounded-2xl border border-outline-variant hover:border-primary transition-colors shadow-[0px_4px_12px_rgba(0,0,0,0.08)] group relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary-container/5 rounded-bl-full -mr-8 -mt-8 transition-transform group-hover:scale-110"></div>
+              <div className="w-14 h-14 bg-surface-container-high rounded-xl flex items-center justify-center mb-lg text-primary relative z-10 group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                <span aria-hidden="true" className="material-symbols-outlined text-[28px]">check_circle</span>
+              </div>
+              <h3 className="font-headline-sm text-headline-sm text-on-surface mb-sm relative z-10">3. Secure Your Slot</h3>
+              <p className="font-body-sm text-body-sm text-on-surface-variant relative z-10">Confirm your details with a single click. Receive instant notifications and calendar invites.</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  );
+}

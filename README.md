@@ -1,2 +1,152 @@
-# clinic-flow-appointment-system-dirty
-clinic-flow-appointment-system , but in a "dirty" stuffs :P
+# ClinicFlow Appointment System (Version B, dirty)
+
+> [!IMPORTANT]
+> **Practice Test Automation Sandbox**  
+> This is **version B** of ClinicFlow: the same app and flows as [version A](https://github.com/farizagati/clinic-flow-appointment-system), but with **no `data-testid` attributes** and a few hard-to-automate spots on purpose. Use it to practise locating elements the way you would in a real legacy app: by role, label, text and scoping.
+>
+> **Live app:** https://farizagati.github.io/clinic-flow-appointment-system-dirty/
+
+A modern, responsive healthcare appointment management application built with React, Vite, and Tailwind CSS. It serves as a realistic target for UI testing, end-to-end (E2E) automation, accessibility auditing, and state validation.
+
+---
+
+## Quick Start
+
+Get the application up and running locally in seconds:
+
+```bash
+# 1. Clone the repository and navigate to the project directory
+cd clinic-flow-appointment-system-dirty
+
+# 2. Install dependencies
+npm install
+
+# 3. Start the local development server
+npm run dev
+```
+
+Open your browser and navigate to `http://localhost:5173/clinic-flow-appointment-system-dirty/#/` (or the URL printed in your terminal).
+
+### Test Accounts
+The application is pre-seeded with mock data. Use the following credentials to test different user roles:
+
+| Role | Email | Password | Access Rights |
+| :--- | :--- | :--- | :--- |
+| **Patient (Member)** | `johnyjohnyyespapa@mail.com` | `EatingSugarNoPapa` | Book and manage personal appointments, edit settings |
+| **System Admin** | `admin@example.com` | `ThisIsNotAdmin` | View stats, approve/cancel all appointments, view user directory, manage departments and doctors |
+
+---
+
+## Differences from Version A
+
+| | Version A (clean) | Version B (dirty) |
+| :--- | :--- | :--- |
+| `data-testid` | On every interactable and asserted element | None |
+| Test hook `id`s | Many (`admin-approve-{id}`, `nav-settings`, ...) | Only ids the markup needs (label links, ARIA references) |
+| Theme toggle | Labelled "Switch to light/dark theme" | No accessible name |
+| Admin Approve / Cancel | Unique test id per row | Same name in every row, scope to the row first |
+| Review Appointment button | Stable id | id changes on every render |
+| localStorage keys | `clinicflow_*`, `theme` | `clinicflow_dirty_*` |
+
+Everything else (pages, text, page titles, validation, roles and labels) is the same, so a suite written with role and label locators should pass on both. See [AGENTS.md](AGENTS.md) for locator notes.
+
+---
+
+## Test Automation Sandbox Scenarios
+
+This application provides several complex front-end interaction patterns to write and run automation tests against:
+
+### 1. Dynamic Dropdown Cascades
+In the [Booking Page](./src/pages/BookAppointment.jsx), the doctor search field is filtered based on both the selected **Clinic** and **Department**.
+*   **Test Idea:** Assert that selecting a specific clinic and department correctly updates and filters the available doctors in the list, and that changing them clears invalid selections.
+
+### 2. Date & Field Validation Assertions
+The booking form requires all fields to be filled and validates that the selected appointment date is not in the past relative to the client system date.
+*   **Test Idea:** Attempt to submit the booking form with a past date or missing fields, and assert that the warning alert (`getByRole('alert')`) is visible and contains correct error messaging.
+
+### 3. Role-Based Navigation & Page Guards
+Different pages are protected under different navigation guards defined in [App.jsx](./src/App.jsx).
+*   **Test Idea:** Attempt to navigate directly to `/admin-dashboard` or `/book-appointment` without logging in, and verify that the application redirects to `/login`. Verify that logging in as a member redirects you away if you try to access admin paths.
+
+### 4. Local Storage Persistence & State Erasure
+All data (users list, current session, booked appointments) is maintained client-side in the browser's `localStorage`. The settings page contains a "Danger Zone" button to purge this cache.
+*   **Test Idea:** Assert that after booking an appointment and refreshing the browser, the appointment remains in the list. Click the **Purge Data** button and verify that the local storage is cleared and the session resets.
+
+### 5. Theme State Verification
+Supports theme switching between Light and Dark modes via the theme toggle button in the navbar.
+*   **Test Idea:** Click the theme toggle and verify that the `<html>` element toggle-switches the `.dark` class, changing UI color schemes.
+
+---
+
+## Codebase Architecture
+
+Below is an overview of the key files and directories:
+
+```
+clinic-flow-appointment-system-dirty/
+├── index.html                  # Main entry page structure and font imports
+├── package.json                # Project dependencies and npm scripts
+├── vite.config.js              # Vite configuration (sets base path to /clinic-flow-appointment-system-dirty/)
+├── tailwind.config.js          # Custom Tailwind configuration (colors, spacing, typography)
+├── postcss.config.js           # PostCSS setup
+└── src/
+    ├── main.jsx                # Application root mounting and context nesting
+    ├── App.jsx                 # Routing configuration and route guards
+    ├── index.css               # Global styles, custom variables, and component classes
+    ├── assets/                 # Bundled images (hero illustration, default avatar)
+    ├── contexts/
+    │   ├── AuthContext.jsx     # Authentication state, storage, and booking operations
+    │   └── ThemeContext.jsx    # Light/dark theme class and local storage persistence
+    ├── data/
+    │   └── mockData.js         # Clinics, departments, doctors, and time slots
+    ├── components/
+    │   ├── FieldError.jsx      # Inline field validation message
+    │   ├── CustomDatePicker.jsx        # Single date picker
+    │   ├── CustomDateRangePicker.jsx   # Date range picker
+    │   ├── SearchDropdown.jsx  # Debounced searchable dropdown
+    │   ├── Modal.jsx           # Dialog shell
+    │   ├── ConfirmDialog.jsx   # Confirm step for destructive actions
+    │   ├── Pagination.jsx      # Page controls
+    │   └── admin/              # Admin dashboard sections (appointments, departments, doctors)
+    ├── layouts/
+    │   ├── Layout.jsx          # Page shell (header, navigation, main, footer)
+    │   └── Navigation.jsx      # Top navbar
+    ├── pages/
+    │   ├── Home.jsx            # Landing page
+    │   ├── Login.jsx           # Login form
+    │   ├── Register.jsx        # Registration form
+    │   ├── BookAppointment.jsx # Appointment booking form
+    │   ├── ReviewAppointment.jsx # Booking review and confirm step
+    │   ├── MyAppointments.jsx  # Patient appointment list (search, filters, pagination)
+    │   ├── AdminDashboard.jsx  # Admin panel
+    │   ├── UserSettings.jsx    # Profile, password, medical records, purge data
+    │   └── InfoPage.jsx        # Footer info pages
+    ├── services/
+    │   └── medicalRecords.js   # Medical records PDF export
+    └── utils/
+        └── statusUtils.js      # Appointment status badge helpers
+```
+
+---
+
+## Script Commands
+
+Run these scripts from the root directory:
+
+- **Start Local Server:**
+  ```bash
+  npm run dev
+  ```
+  Runs Vite dev server.
+
+- **Production Build:**
+  ```bash
+  npm run build
+  ```
+  Builds optimized files to the `dist/` directory.
+
+- **Preview Production Build:**
+  ```bash
+  npm run preview
+  ```
+  Bootstraps a local server to preview the built package.
